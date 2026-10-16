@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Global PHP Setup{% endblock %}
+{% block page_heading %}Global PHP Setup{% endblock %}
+{% block breadcrumb %}Global PHP{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 col-12">
+    <div class="card card-outline card-success shadow-sm">
+      <div class="card-header border-0">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-globe mr-2 text-success"></i> Windows System PATH Integration
+        </h3>
+      </div>
+      <div class="card-body">
+        <p>
+          Configure the active PyAMPP PHP installation as the global PHP interpreter on your Windows system.
+          Once set, you can run commands like <code>php -v</code>, <code>composer</code>, or <code>artisan</code> directly from any Command Prompt, PowerShell, or terminal window.
+        </p>
+
+        <div class="callout callout-info">
+          <h5><i class="fas fa-info-circle mr-1"></i> Current System PHP Detection</h5>
+          <div class="d-flex align-items-center mt-2">
+            <span class="font-weight-bold mr-2">Resolved Path:</span>
+            <span id="currentSystemPhp" class="badge badge-secondary py-1 px-2 font-weight-normal">Checking...</span>
+          </div>
+        </div>
+
+        <div class="alert alert-warning">
+          <i class="fas fa-shield-alt mr-2"></i>
+          <strong>Administrator Privilege Notice:</strong> Setting the system PATH requires elevated permissions. A Windows User Account Control (UAC) prompt will appear to apply this configuration safely.
+        </div>
+
+        <button id="setGlobalPhpBtn" class="btn btn-success font-weight-bold px-4 py-2 mt-2">
+          <i class="fas fa-check mr-2"></i> Set PyAMPP PHP as System Global
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4 col-12">
+    <div class="card card-outline card-secondary shadow-sm">
+      <div class="card-header border-0">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-question-circle mr-2 text-muted"></i> How It Works
+        </h3>
+      </div>
+      <div class="card-body text-sm">
+        <ul class="pl-3 mb-0">
+          <li class="mb-2">Finds your current PyAMPP PHP folder (<code>{{ config.install_dir }}\php</code>).</li>
+          <li class="mb-2">Executes a signed PowerShell helper script with administrator rights.</li>
+          <li class="mb-2">Updates your user and system environment <code>PATH</code> variable.</li>
+          <li>Existing open command prompt windows must be restarted to detect the updated PATH.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+  function checkSystemPhp() {
+    $.getJSON('/api/php/global', function(res) {
+      const badge = $('#currentSystemPhp');
+      if (res.found) {
+        badge.removeClass('badge-secondary badge-danger').addClass('badge-success').text(res.path);
+      } else {
+        badge.removeClass('badge-secondary badge-success').addClass('badge-danger').text('Not detected in system PATH');
+      }
+    });
+  }
+
+  $('#setGlobalPhpBtn').on('click', function() {
+    const btn = $(this);
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i> Setting Global PHP...');
+
+    $.ajax({
+      url: '/api/php/global',
+      type: 'POST',
+      contentType: 'application/json',
+      success: function(res) {
+        if (res.success) {
+          PyAMPP.showAlert(res.message, 'success', 8000);
+          if (res.path) {
+            $('#currentSystemPhp').removeClass('badge-secondary badge-danger').addClass('badge-success').text(res.path);
+          }
+          checkSystemPhp();
+        } else {
+          PyAMPP.showAlert(res.message, 'error', 6000);
+        }
+      },
+      error: function(xhr) {
+        const msg = xhr.responseJSON ? xhr.responseJSON.message : 'Failed to launch administrator setup.';
+        PyAMPP.showAlert(msg, 'error');
+      },
+      complete: function() {
+        btn.prop('disabled', false).html('<i class="fas fa-check mr-2"></i> Set PyAMPP PHP as System Global');
+      }
+    });
+  });
+
+  checkSystemPhp();
+});
+</script>
+{% endblock %}

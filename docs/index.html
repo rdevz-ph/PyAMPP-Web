@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyAMPP - Portable Web Development Stack Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="container nav-container">
+            <div class="logo-group">
+                <img src="images/pyampp.png" alt="PyAMPP Logo" class="nav-logo">
+                <a href="#" class="logo">PyAMPP</a>
+            </div>
+            <nav>
+                <a href="https://github.com/rdevz-ph/PyAMPP-Web" class="accent-link"
+                    style="color: var(--accent); text-decoration: none; font-weight: 600;">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="container">
+            <img src="images/pyampp.png" alt="PyAMPP Logo" class="hero-logo">
+            <h1>PyAMPP</h1>
+            <p>A portable web server manager for Windows with a modern web dashboard and system tray controller to set up and manage Apache, MySQL, PHP, and phpMyAdmin in one place.</p>
+            <div class="badges">
+                <img src="https://img.shields.io/badge/Platform-Windows-0078D6?logo=windows&logoColor=white" alt="Platform">
+                <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white" alt="Python">
+                <img src="https://img.shields.io/badge/Interface-Web%20Dashboard%20%26%20Tray-4f46e5" alt="Interface">
+                <img src="https://img.shields.io/badge/License-MIT-059669" alt="License">
+                <img src="https://img.shields.io/badge/Version-1.0.0--web-f59e0b" alt="Version">
+            </div>
+            <div class="slideshow-container" onmouseenter="pauseSlideshow()" onmouseleave="startSlideshow()">
+                <div class="slide fade">
+                    <img src="images/Screenshot_1.png" alt="PyAMPP Web Dashboard">
+                    <div class="slide-caption">Web Management Dashboard</div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/Screenshot_2.png" alt="PyAMPP PHP Extensions">
+                    <div class="slide-caption">PHP Extensions Manager</div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/Screenshot_3.png" alt="PyAMPP PHP CLI Tester">
+                    <div class="slide-caption">PHP CLI Tester and Code Runner</div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/Screenshot_4.png" alt="PyAMPP Global PHP Setup">
+                    <div class="slide-caption">Global PHP System PATH Integration</div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/Screenshot_5.png" alt="PyAMPP Diagnostics and SSL">
+                    <div class="slide-caption">Diagnostics & SSL Certificate Verification</div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/Screenshot_6.png" alt="PyAMPP Real-Time System Logs">
+                    <div class="slide-caption">Real-Time System and Service Logs</div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/Screenshot_7.png" alt="PyAMPP Settings and Paths">
+                    <div class="slide-caption">Settings and Directory Configuration</div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/Screenshot_8.png" alt="PyAMPP Component Setup Wizard">
+                    <div class="slide-caption">Component Setup and Installation Wizard</div>
+                </div>
+
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+                <div class="slides-dots">
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                    <span class="dot" onclick="currentSlide(3)"></span>
+                    <span class="dot" onclick="currentSlide(4)"></span>
+                    <span class="dot" onclick="currentSlide(5)"></span>
+                    <span class="dot" onclick="currentSlide(6)"></span>
+                    <span class="dot" onclick="currentSlide(7)"></span>
+                    <span class="dot" onclick="currentSlide(8)"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <aside>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#download">Download</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#presets">Supported Presets</a></li>
+                <li><a href="#technical">Requirements</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#legal">License & Disclaimer</a></li>
+            </ul>
+        </aside>
+
+        <article>
+            <section id="overview">
+                <h2>Project Overview</h2>
+                <p>PyAMPP is a portable web server stack manager for Windows. It provides a browser-based management dashboard running locally at <code>http://127.0.0.1:5000</code> and a lightweight system tray controller to install, start, stop, and manage Apache, MySQL, PHP, and phpMyAdmin without manual configuration editing.</p>
+                <p>All downloaded components, configuration files, and database records remain inside your designated installation directory, keeping your development environment clean and portable.</p>
+            </section>
+
+            <section id="download">
+                <h2>Download</h2>
+                <p>Download the latest version of PyAMPP from GitHub as a standalone executable file.</p>
+                <div class="warning-box">
+                    <strong>Note</strong>
+                    This tool is actively maintained. If you encounter an issue, please include your application version and <a
+                        href="https://github.com/rdevz-ph/PyAMPP-Web/issues" style="color: var(--accent);">open an
+                        issue</a>.
+                </div>
+                <a href="https://github.com/rdevz-ph/PyAMPP-Web/releases" class="download-button">View All
+                    Releases</a>
+            </section>
+
+            <section id="features">
+                <h2>Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Web Management Dashboard</h4>
+                        <p>Access live process metrics, CPU usage, memory consumption, and port listening status from your browser.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Independent Services</h4>
+                        <p>Apache and MySQL run as standalone background processes and continue running even when the browser tab is closed.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Component Setup Wizard</h4>
+                        <p>Select and install tested versions of Apache, MySQL, PHP, and phpMyAdmin with automated download and directory verification.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Custom Paths & Web Root</h4>
+                        <p>Set a custom installation directory, choose your own document root (htdocs), and manage separate MySQL data storage.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>PHP Extensions Manager</h4>
+                        <p>Search and toggle extensions in php.ini with one click, including automatic Apache restart after saving changes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>PHP CLI Tester</h4>
+                        <p>Run PHP commands, check configuration values, and test PHP code snippets directly in your browser.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Global PHP System PATH</h4>
+                        <p>Add or remove portable PHP from your Windows system PATH to use Composer and command-line tools without manual setup.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Diagnostics & SSL Verification</h4>
+                        <p>Scan local ports, test socket connection latency, inspect SSL certificates, and generate self-signed HTTPS certificates.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Real-Time System Logs</h4>
+                        <p>Monitor consolidated logs for PyAMPP, Apache, and MySQL with log level filtering, auto-scroll, and log clearing.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>System Tray Companion</h4>
+                        <p>Control server operations, open the dashboard, or stop all background processes cleanly from the Windows notification area.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="presets">
+                <h2>Supported Versions (Presets)</h2>
+                <p>PyAMPP includes tested download presets for the following components (defined in <code>presets.json</code>):</p>
+                <div class="preset-container">
+                    <ul>
+                        <li><strong>PHP:</strong> 8.5.6, 8.4.21, 8.3.31, 8.2.31, 8.1.34, 8.0.30, and 7.4.33</li>
+                        <li><strong>Apache:</strong> 2.4.66</li>
+                        <li><strong>MySQL:</strong> 8.4.4, 8.0.40, and 5.7.44</li>
+                        <li><strong>phpMyAdmin:</strong> 5.2.3, 5.2.2, and 5.2.1</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="technical">
+                <h2>Requirements</h2>
+                <ul>
+                    <li><strong>Operating System:</strong> Windows 10 or Windows 11 (64-bit).</li>
+                    <li><strong>Runtime:</strong> Standalone executable requires no external dependencies. Python 3.10+ is required when running from source.</li>
+                    <li><strong>Visual C++ Runtimes:</strong> Uses standard 64-bit Windows runtimes.</li>
+                </ul>
+            </section>
+
+            <section id="architecture">
+                <h2>System Architecture</h2>
+                <p>PyAMPP is designed with three core components:</p>
+                <ul>
+                    <li><strong>Core Management Engine:</strong> Handles downloading, file extraction, automated configuration templates, and server process lifecycles.</li>
+                    <li><strong>Web Management Dashboard:</strong> An embedded local web server providing a responsive management interface at <code>http://127.0.0.1:5000</code>.</li>
+                    <li><strong>System Tray Controller:</strong> A lightweight background application that resides in the notification area for quick access and graceful shutdowns.</li>
+                </ul>
+            </section>
+
+            <section id="faq">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <h4>Why use PyAMPP instead of Docker?</h4>
+                    <p>Docker is powerful, but it requires significant disk space and virtualization overhead. PyAMPP runs natively on Windows without virtualization, making it lighter and faster to start for everyday PHP development.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Is PyAMPP portable?</h4>
+                    <p>Yes. The application runs as a standalone file, and all downloaded programs remain in your selected installation directory. If you move the directory, you can update the path in the Settings tab.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Can I use custom download links for components?</h4>
+                    <p>Yes. PyAMPP allows you to enter custom download links in the Settings tab under Component Download URLs.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Do I need Administrator rights?</h4>
+                    <p>No. Normal everyday development and service management do not require administrator rights. Administrator rights are only requested when adding or removing PHP from the Windows system PATH.</p>
+                </div>
+            </section>
+
+            <section id="legal">
+                <h2>License</h2>
+                <p>PyAMPP is licensed under the <a href="https://github.com/rdevz-ph/PyAMPP-Web/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
+                <h3>Disclaimer</h3>
+                <p>PyAMPP is designed for local development and testing only. Do not use it to host public websites on the internet.</p>
+            </section>
+        </article>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Romel Brosas. Built for Windows.</p>
+        </div>
+    </footer>
+    <script>
+        let slideIndex = 1;
+        let slideshowInterval = null;
+
+        showSlides(slideIndex);
+        startSlideshow();
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("slide");
+            let dots = document.getElementsByClassName("dot");
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            if (slides[slideIndex - 1]) {
+                slides[slideIndex - 1].style.display = "block";
+            }
+            if (dots[slideIndex - 1]) {
+                dots[slideIndex - 1].className += " active";
+            }
+        }
+
+        function startSlideshow() {
+            if (!slideshowInterval) {
+                slideshowInterval = setInterval(() => {
+                    plusSlides(1);
+                }, 4000);
+            }
+        }
+
+        function pauseSlideshow() {
+            if (slideshowInterval) {
+                clearInterval(slideshowInterval);
+                slideshowInterval = null;
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}PHP Extensions{% endblock %}
+{% block page_heading %}PHP Extensions Manager{% endblock %}
+{% block breadcrumb %}PHP Extensions{% endblock %}
+
+{% block content %}
+<div class="card card-outline card-primary shadow-sm">
+  <div class="card-header border-0 pb-2">
+    <div class="row align-items-center">
+      <div class="col-lg-7 col-md-6 col-12">
+        <h3 class="card-title font-weight-bold float-none mb-1">
+          <i class="fas fa-puzzle-piece mr-2 text-primary"></i> Installed Extensions
+        </h3>
+        <p class="text-muted text-sm mb-0">
+          Enable or disable PHP extensions by toggling the options below. Changes are written directly to <code>php.ini</code>.
+        </p>
+      </div>
+      <div class="col-lg-5 col-md-6 col-12 mt-md-0 mt-3 d-flex justify-content-md-end align-items-center flex-wrap">
+        <div class="custom-control custom-checkbox mr-3 my-1">
+          <input type="checkbox" class="custom-control-input" id="restartApacheOnSave" checked>
+          <label class="custom-control-label font-weight-normal text-sm" for="restartApacheOnSave">Restart Apache on Save</label>
+        </div>
+        <button id="refreshExtensionsBtn" class="btn btn-sm btn-secondary mr-2 my-1">
+          <i class="fas fa-sync-alt mr-1"></i> Refresh
+        </button>
+        <button id="saveExtensionsBtn" class="btn btn-sm btn-primary my-1">
+          <i class="fas fa-save mr-1"></i> Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body pt-0">
+    <!-- Search Bar -->
+    <div class="form-group mb-3">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+        </div>
+        <input type="text" id="extensionSearch" class="form-control" placeholder="Search extensions (e.g. curl, mbstring, openssl)...">
+      </div>
+    </div>
+
+    <!-- Status / Loading -->
+    <div id="extensionsLoading" class="text-center py-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <p class="text-muted mt-2">Loading php.ini extensions...</p>
+    </div>
+
+    <div id="extensionsError" class="alert alert-warning d-none" role="alert">
+      <i class="fas fa-exclamation-triangle mr-2"></i>
+      <span id="extensionsErrorMessage">php.ini not found. Please ensure PHP is installed.</span>
+    </div>
+
+    <!-- Extensions Container Grid (4 columns) -->
+    <div id="extensionsContainer" class="row d-none">
+      <!-- Injected via JavaScript -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+  let allExtensions = [];
+
+  function loadExtensions() {
+    $('#extensionsLoading').removeClass('d-none');
+    $('#extensionsContainer').addClass('d-none');
+    $('#extensionsError').addClass('d-none');
+
+    $.getJSON('/api/php/extensions', function(res) {
+      $('#extensionsLoading').addClass('d-none');
+      if (!res.success) {
+        $('#extensionsError').removeClass('d-none');
+        $('#extensionsErrorMessage').text(res.message);
+        return;
+      }
+
+      allExtensions = res.extensions || [];
+      renderExtensions(allExtensions);
+      $('#extensionsContainer').removeClass('d-none');
+    }).fail(function() {
+      $('#extensionsLoading').addClass('d-none');
+      $('#extensionsError').removeClass('d-none');
+      $('#extensionsErrorMessage').text('Failed to communicate with local server.');
+    });
+  }
+
+  function renderExtensions(extensions) {
+    const container = $('#extensionsContainer');
+    container.empty();
+
+    if (!extensions.length) {
+      container.html('<div class="col-12 text-center text-muted py-3">No extensions found.</div>');
+      return;
+    }
+
+    extensions.forEach((ext, idx) => {
+      const isChecked = ext.enabled ? 'checked' : '';
+      const html = `
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 extension-card-item mb-2" data-name="${ext.name.toLowerCase()}">
+          <div class="extension-item d-flex align-items-center justify-content-between">
+            <span class="font-weight-bold text-sm">${ext.name}</span>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input ext-switch" id="ext_${idx}" data-name="${ext.name}" ${isChecked}>
+              <label class="custom-control-label" for="ext_${idx}"></label>
+            </div>
+          </div>
+        </div>
+      `;
+      container.append(html);
+    });
+  }
+
+  // Filter Search
+  $('#extensionSearch').on('keyup', function() {
+    const q = $(this).val().toLowerCase().trim();
+    $('.extension-card-item').each(function() {
+      const name = $(this).data('name');
+      if (!q || name.includes(q)) {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
+  });
+
+  // Save changes
+  $('#saveExtensionsBtn').on('click', function() {
+    const btn = $(this);
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Saving...');
+
+    const enabledList = [];
+    $('.ext-switch:checked').each(function() {
+      enabledList.push($(this).data('name'));
+    });
+
+    const restartApache = $('#restartApacheOnSave').is(':checked');
+
+    $.ajax({
+      url: '/api/php/extensions',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        enabled_extensions: enabledList,
+        restart_apache: restartApache
+      }),
+      success: function(res) {
+        if (res.success) {
+          PyAMPP.showAlert(res.message, 'success');
+        } else {
+          PyAMPP.showAlert(res.message, 'error');
+        }
+      },
+      error: function(xhr) {
+        const msg = xhr.responseJSON ? xhr.responseJSON.message : 'Error saving extensions.';
+        PyAMPP.showAlert(msg, 'error');
+      },
+      complete: function() {
+        btn.prop('disabled', false).html('<i class="fas fa-save mr-1"></i> Save Changes');
+      }
+    });
+  });
+
+  $('#refreshExtensionsBtn').on('click', loadExtensions);
+
+  loadExtensions();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,8 @@
+customtkinter
+requests>=2.31.0
+psutil
+certifi
+Pillow
+pystray
+pyinstaller
+flask>=3.0.0

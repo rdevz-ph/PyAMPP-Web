@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}Component Setup{% endblock %}
+{% block page_heading %}Component Setup &amp; Installation{% endblock %}
+{% block breadcrumb %}Component Setup{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <!-- Setup Wizard Welcome Banner -->
+    <div class="card card-outline card-primary shadow-sm mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+          <div class="my-1">
+            <h4 class="font-weight-bold text-primary mb-1">
+              <i class="fas fa-magic mr-2"></i> PyAMPP Setup Wizard
+            </h4>
+            <p class="text-muted mb-0">
+              Welcome to PyAMPP! Install and configure Apache, MySQL, PHP, and phpMyAdmin in one step.
+            </p>
+          </div>
+          <div class="my-1">
+            <a href="/dashboard?skip=1" class="btn btn-sm btn-outline-secondary">
+              Skip to Dashboard <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Installation Directory Preview Card -->
+    <div class="card card-outline card-info shadow-sm mb-3">
+      <div class="card-header border-0 py-2 d-flex justify-content-between align-items-center">
+        <h6 class="font-weight-bold mb-0 text-info">
+          <i class="fas fa-folder mr-2"></i> Configured Installation Directories
+        </h6>
+        <a href="/settings" class="btn btn-xs btn-outline-info">
+          <i class="fas fa-cog mr-1"></i> Change Paths in Settings
+        </a>
+      </div>
+      <div class="card-body py-2">
+        <div class="row">
+          <div class="col-md-4 col-12 mb-2 mb-md-0">
+            <small class="text-muted d-block font-weight-bold">Installation Directory:</small>
+            <code class="font-weight-bold text-dark text-break">{{ install_root }}</code>
+          </div>
+          <div class="col-md-4 col-12 mb-2 mb-md-0">
+            <small class="text-muted d-block font-weight-bold">Web Root (htdocs):</small>
+            <code class="font-weight-bold text-dark text-break">{{ config.htdocs_dir }}</code>
+          </div>
+          <div class="col-md-4 col-12">
+            <small class="text-muted d-block font-weight-bold">MySQL Data Path:</small>
+            <code class="font-weight-bold text-dark text-break">{{ config.mysql_data_dir }}</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Progress Card -->
+    <div id="progressCard" class="card card-outline card-info shadow-sm d-none mb-4">
+      <div class="card-body">
+        <h5 id="progressTitle" class="font-weight-bold mb-2">Downloading Component...</h5>
+        <div class="progress progress-sm active mb-2">
+          <div id="progressBar" class="progress-bar bg-success progress-bar-striped" role="progressbar" style="width: 0%"></div>
+        </div>
+        <small id="progressDetail" class="text-muted">Preparing download...</small>
+      </div>
+    </div>
+
+    <!-- Setup Completed Card -->
+    <div id="wizardFinishCard" class="card card-outline card-success shadow-sm d-none mb-4">
+      <div class="card-body text-center py-4">
+        <i class="fas fa-check-circle text-success fa-3x mb-3"></i>
+        <h4 class="font-weight-bold">Setup Completed Successfully!</h4>
+        <p class="text-muted mb-3">All selected components have been installed, extracted, and configured.</p>
+        <a href="/dashboard" class="btn btn-success px-4 font-weight-bold">
+          <i class="fas fa-tachometer-alt mr-2"></i> Launch Server Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- Components Table / Cards -->
+    <div class="card card-outline card-primary shadow-sm">
+      <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap">
+        <h3 class="card-title font-weight-bold my-1">
+          <i class="fas fa-boxes mr-2 text-primary"></i> Environment Components
+        </h3>
+        <div class="my-1 d-flex flex-wrap align-items-center">
+          <button type="button" id="checkUpdatesBtn" class="btn btn-sm btn-outline-primary mr-2 mb-1">
+            <i class="fas fa-cloud-download-alt mr-1"></i> Check Preset Updates
+          </button>
+          <a href="/settings" class="btn btn-sm btn-outline-secondary mr-2 mb-1">
+            <i class="fas fa-sliders-h mr-1"></i> Custom URLs in Settings
+          </a>
+          <button id="installAllBtn" class="btn btn-sm btn-success font-weight-bold mb-1">
+            <i class="fas fa-download mr-1"></i> Install / Update All Components
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Status</th>
+              <th>Configured Version / Preset</th>
+              <th class="text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- PHP -->
+            <tr>
+              <td>
+                <strong><i class="fab fa-php text-primary mr-2"></i> PHP Engine</strong>
+                <small class="text-muted d-block">{{ config.install_dir }}\php</small>
+              </td>
+              <td id="statusCol_php">
+                <span class="badge badge-secondary">Checking...</span>
+              </td>
+              <td><small class="text-muted text-break">{{ config.php_url }}</small></td>
+              <td class="text-right">
+                <button class="btn btn-sm btn-outline-primary install-single-btn" data-comp="php">
+                  <i class="fas fa-download mr-1"></i> Install / Reinstall
+                </button>
+              </td>
+            </tr>
+
+            <!-- Apache -->
+            <tr>
+              <td>
+                <strong><i class="fas fa-feather-alt text-danger mr-2"></i> Apache HTTP Server</strong>
+                <small class="text-muted d-block">{{ config.install_dir }}\apache</small>
+              </td>
+              <td id="statusCol_apache">
+                <span class="badge badge-secondary">Checking...</span>
+              </td>
+              <td><small class="text-muted text-break">{{ config.apache_url }}</small></td>
+              <td class="text-right">
+                <button class="btn btn-sm btn-outline-primary install-single-btn" data-comp="apache">
+                  <i class="fas fa-download mr-1"></i> Install / Reinstall
+                </button>
+              </td>
+            </tr>
+
+            <!-- MySQL -->
+            <tr>
+              <td>
+                <strong><i class="fas fa-database text-info mr-2"></i> MySQL Server</strong>
+                <small class="text-muted d-block">{{ config.install_dir }}\mysql</small>
+              </td>
+              <td id="statusCol_mysql">
+                <span class="badge badge-secondary">Checking...</span>
+              </td>
+              <td><small class="text-muted text-break">{{ config.mysql_url }}</small></td>
+              <td class="text-right">
+                <button class="btn btn-sm btn-outline-primary install-single-btn" data-comp="mysql">
+                  <i class="fas fa-download mr-1"></i> Install / Reinstall
+                </button>
+              </td>
+            </tr>
+
+            <!-- phpMyAdmin -->
+            <tr>
+              <td>
+                <strong><i class="fas fa-tools text-warning mr-2"></i> phpMyAdmin</strong>
+                <small class="text-muted d-block">{{ config.install_dir }}\phpmyadmin</small>
+              </td>
+              <td id="statusCol_phpmyadmin">
+                <span class="badge badge-secondary">Checking...</span>
+              </td>
+              <td><small class="text-muted text-break">{{ config.phpmyadmin_url }}</small></td>
+              <td class="text-right">
+                <button class="btn btn-sm btn-outline-primary install-single-btn" data-comp="phpmyadmin">
+                  <i class="fas fa-download mr-1"></i> Install / Reinstall
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+  function checkComponentStatus() {
+    $.getJSON('/api/status', function(data) {
+      if (!data.installed) return;
+      ['php', 'apache', 'mysql', 'phpmyadmin'].forEach(k => {
+        const isInstalled = data.installed[k];
+        const cell = $(`#statusCol_${k}`);
+        if (isInstalled) {
+          cell.html('<span class="badge badge-success"><i class="fas fa-check mr-1"></i> Installed</span>');
+        } else {
+          cell.html('<span class="badge badge-danger"><i class="fas fa-times mr-1"></i> Not Installed</span>');
+        }
+      });
+    });
+  }
+
+  window.checkWizardComponentStatus = checkComponentStatus;
+
+  function startInstallation(components) {
+    $('.install-single-btn, #installAllBtn').prop('disabled', true);
+    $('#progressCard').removeClass('d-none');
+    $('#progressBar').css('width', '0%').removeClass('bg-danger bg-success').addClass('bg-primary progress-bar-striped progress-bar-animated');
+    $('#progressTitle').text('Starting component download...');
+    $('#progressDetail').text('Checking and preparing services...');
+
+    $.ajax({
+      url: '/api/component/install',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({ components: components }),
+      success: function(res) {
+        if (!res.success) {
+          PyAMPP.showAlert(res.message, 'error');
+          $('.install-single-btn, #installAllBtn').prop('disabled', false);
+          $('#progressCard').addClass('d-none');
+        } else {
+          PyAMPP.isInstalling = true;
+          PyAMPP.pollInstallProgress(true);
+        }
+      },
+      error: function(xhr) {
+        const msg = xhr.responseJSON ? xhr.responseJSON.message : 'Failed to start installation.';
+        PyAMPP.showAlert(msg, 'error');
+        $('.install-single-btn, #installAllBtn').prop('disabled', false);
+        $('#progressCard').addClass('d-none');
+      }
+    });
+  }
+
+  $('.install-single-btn').on('click', function() {
+    const comp = $(this).data('comp');
+    startInstallation([comp]);
+  });
+
+  $('#installAllBtn').on('click', function() {
+    startInstallation(['php', 'apache', 'mysql', 'phpmyadmin']);
+  });
+
+  $('#checkUpdatesBtn').on('click', function() {
+    const btn = $(this);
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Checking...');
+
+    $.ajax({
+      url: '/api/updates/check',
+      type: 'POST',
+      success: function(res) {
+        if (res.success) {
+          PyAMPP.showAlert(res.message, 'success');
+          setTimeout(() => location.reload(), 1500);
+        } else {
+          PyAMPP.showAlert(res.message, 'info');
+        }
+      },
+      error: function() {
+        PyAMPP.showAlert('Could not check for preset updates.', 'error');
+      },
+      complete: function() {
+        btn.prop('disabled', false).html('<i class="fas fa-cloud-download-alt mr-1"></i> Check Preset Updates');
+      }
+    });
+  });
+
+  checkComponentStatus();
+});
+</script>
+{% endblock %}

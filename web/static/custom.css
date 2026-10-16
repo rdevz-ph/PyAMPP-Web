@@ -1,0 +1,165 @@
+/* PyAMPP Clean Theme Enhancements */
+
+:root {
+  --primary-accent: #1f6aa5;
+  --success-color: #2e7d32;
+  --danger-color: #c62828;
+  --warning-color: #ef6c00;
+  --card-border-light: #e2e8f0;
+  --card-border-dark: #334155;
+}
+
+/* Service Status Badges */
+.status-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 0.35em 0.75em;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-badge.running {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+  border: 1px solid #c8e6c9;
+}
+
+.status-badge.stopped {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.dark-mode .status-badge.running {
+  background-color: #064e3b;
+  color: #a7f3d0;
+  border: 1px solid #047857;
+}
+
+.dark-mode .status-badge.stopped {
+  background-color: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+}
+
+/* Console and Log Output */
+.console-output {
+  background-color: #0f172a;
+  color: #f8fafc;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  min-height: 280px;
+  max-height: 520px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.log-entry-info {
+  color: #60a5fa;
+}
+
+.log-entry-error {
+  color: #f87171;
+}
+
+.log-entry-warning {
+  color: #fbbf24;
+}
+
+.log-entry-sys {
+  color: #a78bfa;
+}
+
+/* Service Card Layout */
+.service-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.service-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.quick-action-btn {
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.38rem 0.75rem;
+}
+
+/* Search Extension List */
+.extension-item {
+  border: 1px solid var(--card-border-light);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.dark-mode .extension-item {
+  border-color: var(--card-border-dark);
+}
+
+.extension-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.dark-mode .extension-item:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Notification Banner */
+#alertContainer {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 9999;
+  min-width: 300px;
+  max-width: 450px;
+}
+
+/* Explicit Disabled Button Appearance */
+.btn:disabled,
+.btn.disabled,
+a.btn.disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+  filter: grayscale(50%) !important;
+}
+
+/* Installation Progress Navbar Notification */
+#globalNavInstallProgress .navbar-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 4px;
+}
+
+#globalNavInstallProgress .dropdown-menu {
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Polished inline code and descriptions */
+code {
+  color: #0284c7;
+  background-color: rgba(2, 132, 199, 0.08);
+  padding: 0.12rem 0.38rem;
+  border-radius: 4px;
+  font-size: 88%;
+}
+
+.dark-mode code {
+  color: #38bdf8;
+  background-color: rgba(56, 189, 248, 0.12);
+}
+
+
+

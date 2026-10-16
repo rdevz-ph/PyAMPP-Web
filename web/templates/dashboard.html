@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_heading %}Server Dashboard{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+
+{% block content %}
+{% if not config.wizard_completed or wizard_skipped %}
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="alert alert-warning alert-dismissible fade show shadow-sm mb-0 d-flex justify-content-between align-items-center flex-wrap" role="alert">
+      <div class="my-1">
+        <i class="fas fa-exclamation-triangle mr-2"></i>
+        <strong>Environment Setup Required:</strong> Core components (Apache, MySQL, PHP) have not been installed yet.
+      </div>
+      <div class="my-1">
+        <a href="/wizard" class="btn btn-sm btn-warning font-weight-bold">
+          <i class="fas fa-download mr-1"></i> Open Setup Wizard
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Global Controls Card -->
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="card card-outline card-primary shadow-sm mb-0">
+      <div class="card-body py-2 d-flex flex-wrap align-items-center justify-content-between">
+        <div class="d-flex align-items-center my-1">
+          <span class="font-weight-bold mr-3"><i class="fas fa-layer-group text-primary mr-1"></i> Global Controls:</span>
+          <button id="globalStartAllBtn" class="btn btn-sm btn-success mr-2 quick-action-btn" data-service="all" data-service-action="start">
+            <i class="fas fa-play mr-1"></i> Start All
+          </button>
+          <button id="globalStopAllBtn" class="btn btn-sm btn-danger mr-2 quick-action-btn" data-service="all" data-service-action="stop">
+            <i class="fas fa-stop mr-1"></i> Stop All
+          </button>
+          <button id="globalRestartAllBtn" class="btn btn-sm btn-secondary mr-2 quick-action-btn" data-service="all" data-service-action="restart">
+            <i class="fas fa-sync-alt mr-1"></i> Restart All
+          </button>
+        </div>
+        <div class="d-flex align-items-center my-1">
+          <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-folder-open mr-1"></i> Shortcuts
+            </button>
+            <div class="dropdown-menu dropdown-menu-right shadow">
+              <h6 class="dropdown-header font-weight-bold text-uppercase text-xs text-muted">Directories</h6>
+              <a class="dropdown-item quick-open-item" href="#" data-open-target="htdocs">
+                <i class="fas fa-folder text-warning mr-2"></i> Web Root (htdocs)
+              </a>
+              <a class="dropdown-item quick-open-item" href="#" data-open-target="install_dir">
+                <i class="fas fa-folder-open text-info mr-2"></i> Binaries Directory (bin)
+              </a>
+              <a class="dropdown-item quick-open-item" href="#" data-open-target="mysql_data">
+                <i class="fas fa-database text-primary mr-2"></i> MySQL Data Directory
+              </a>
+              <div class="dropdown-divider"></div>
+              <h6 class="dropdown-header font-weight-bold text-uppercase text-xs text-muted">Configuration Files</h6>
+              <a class="dropdown-item quick-open-item" href="#" data-open-target="php_ini">
+                <i class="fas fa-file-code text-primary mr-2"></i> PHP Configuration (php.ini)
+              </a>
+              <a class="dropdown-item quick-open-item" href="#" data-open-target="httpd_conf">
+                <i class="fas fa-file-code text-danger mr-2"></i> Apache Configuration (httpd.conf)
+              </a>
+              <a class="dropdown-item quick-open-item" href="#" data-open-target="my_ini">
+                <i class="fas fa-file-code text-info mr-2"></i> MySQL Configuration (my.ini)
+              </a>
+            </div>
+          </div>
+          <a href="/wizard" class="btn btn-sm btn-outline-info mr-2 quick-action-btn">
+            <i class="fas fa-download mr-1"></i> Component Setup
+          </a>
+          <a href="/logs" class="btn btn-sm btn-outline-secondary quick-action-btn">
+            <i class="fas fa-file-alt mr-1"></i> View Logs
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Primary Services Cards -->
+<div class="row">
+  <!-- Apache Card -->
+  <div class="col-lg-6 col-12">
+    <div class="card service-card card-outline card-info shadow-sm">
+      <div class="card-header border-0 d-flex justify-content-between align-items-center">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-server mr-2 text-info"></i> Apache Web Server
+        </h3>
+        <div class="card-tools">
+          <span id="apacheStatusBadge" class="status-badge stopped">
+            <i class="fas fa-circle mr-1" style="font-size:0.6rem;"></i> STOPPED
+          </span>
+        </div>
+      </div>
+      <div class="card-body pt-2">
+        <div class="row mb-3">
+          <div class="col-sm-4 col-6">
+            <small class="text-muted d-block">Listening Port</small>
+            <span class="font-weight-bold" id="apachePortDisplay">{{ config.apache_port }}</span>
+          </div>
+          <div class="col-sm-4 col-6">
+            <small class="text-muted d-block">Process ID (PID)</small>
+            <span class="font-weight-bold" id="apachePidDisplay">-</span>
+          </div>
+          <div class="col-sm-4 col-12 mt-sm-0 mt-2">
+            <small class="text-muted d-block">Memory Usage</small>
+            <span class="font-weight-bold" id="apacheMemoryDisplay">-</span>
+          </div>
+        </div>
+
+        <div class="border-top pt-3 d-flex flex-wrap gap-2">
+          <button id="apacheStartBtn" class="btn btn-sm btn-success mr-2 mb-2" data-service="apache" data-service-action="start">
+            <i class="fas fa-play mr-1"></i> Start
+          </button>
+          <button id="apacheStopBtn" class="btn btn-sm btn-danger mr-2 mb-2" data-service="apache" data-service-action="stop" disabled>
+            <i class="fas fa-stop mr-1"></i> Stop
+          </button>
+          <button id="apacheRestartBtn" class="btn btn-sm btn-secondary mr-2 mb-2" data-service="apache" data-service-action="restart" disabled>
+            <i class="fas fa-sync-alt mr-1"></i> Restart
+          </button>
+          <a href="http://localhost:{{ config.apache_port }}" id="apacheOpenLink" target="_blank" class="btn btn-sm btn-outline-primary mr-2 mb-2">
+            <i class="fas fa-external-link-alt mr-1"></i> Open Localhost
+          </a>
+          <button type="button" class="btn btn-sm btn-outline-secondary mr-2 mb-2 quick-open-item" data-open-target="htdocs" title="Explore htdocs directory in Windows File Explorer">
+            <i class="fas fa-folder-open mr-1"></i> htdocs
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary mb-2 quick-open-item" data-open-target="httpd_conf" title="Open httpd.conf in text editor">
+            <i class="fas fa-file-alt mr-1"></i> httpd.conf
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MySQL Card -->
+  <div class="col-lg-6 col-12">
+    <div class="card service-card card-outline card-primary shadow-sm">
+      <div class="card-header border-0 d-flex justify-content-between align-items-center">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-database mr-2 text-primary"></i> MySQL Database Server
+        </h3>
+        <div class="card-tools">
+          <span id="mysqlStatusBadge" class="status-badge stopped">
+            <i class="fas fa-circle mr-1" style="font-size:0.6rem;"></i> STOPPED
+          </span>
+        </div>
+      </div>
+      <div class="card-body pt-2">
+        <div class="row mb-3">
+          <div class="col-sm-4 col-6">
+            <small class="text-muted d-block">Listening Port</small>
+            <span class="font-weight-bold" id="mysqlPortDisplay">{{ config.mysql_port }}</span>
+          </div>
+          <div class="col-sm-4 col-6">
+            <small class="text-muted d-block">Process ID (PID)</small>
+            <span class="font-weight-bold" id="mysqlPidDisplay">-</span>
+          </div>
+          <div class="col-sm-4 col-12 mt-sm-0 mt-2">
+            <small class="text-muted d-block">Memory Usage</small>
+            <span class="font-weight-bold" id="mysqlMemoryDisplay">-</span>
+          </div>
+        </div>
+
+        <div class="border-top pt-3 d-flex flex-wrap gap-2">
+          <button id="mysqlStartBtn" class="btn btn-sm btn-success mr-2 mb-2" data-service="mysql" data-service-action="start">
+            <i class="fas fa-play mr-1"></i> Start
+          </button>
+          <button id="mysqlStopBtn" class="btn btn-sm btn-danger mr-2 mb-2" data-service="mysql" data-service-action="stop" disabled>
+            <i class="fas fa-stop mr-1"></i> Stop
+          </button>
+          <button id="mysqlRestartBtn" class="btn btn-sm btn-secondary mr-2 mb-2" data-service="mysql" data-service-action="restart" disabled>
+            <i class="fas fa-sync-alt mr-1"></i> Restart
+          </button>
+          <a href="http://localhost:{{ config.apache_port }}/phpmyadmin" id="mysqlOpenPmaLink" target="_blank" class="btn btn-sm btn-outline-primary mr-2 mb-2">
+            <i class="fas fa-table mr-1"></i> Open phpMyAdmin
+          </a>
+          <button type="button" class="btn btn-sm btn-outline-secondary mr-2 mb-2 quick-open-item" data-open-target="mysql_data" title="Explore MySQL data directory in Windows File Explorer">
+            <i class="fas fa-folder-open mr-1"></i> Data Dir
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary mb-2 quick-open-item" data-open-target="my_ini" title="Open my.ini in text editor">
+            <i class="fas fa-file-alt mr-1"></i> my.ini
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Component Overview & Directory Paths -->
+<div class="row">
+  <div class="col-lg-6 col-12">
+    <div class="card shadow-sm">
+      <div class="card-header border-0">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-cubes mr-2 text-warning"></i> Installed Versions
+        </h3>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-striped table-valign-middle mb-0">
+          <tbody>
+            <tr>
+              <td><i class="fab fa-php text-primary mr-2"></i> PHP Engine</td>
+              <td class="text-right">
+                <span class="font-weight-bold" id="installedPhpVer">Loading...</span>
+                <button type="button" class="btn btn-xs btn-outline-primary ml-2 quick-open-item" data-open-target="php_ini" title="Open php.ini in text editor">
+                  <i class="fas fa-file-code mr-1"></i> php.ini
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-feather-alt text-danger mr-2"></i> Apache HTTP Server</td>
+              <td class="text-right">
+                <span class="font-weight-bold" id="installedApacheVer">Loading...</span>
+                <button type="button" class="btn btn-xs btn-outline-secondary ml-2 quick-open-item" data-open-target="httpd_conf" title="Open httpd.conf in text editor">
+                  <i class="fas fa-file-code mr-1"></i> httpd.conf
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-database text-info mr-2"></i> MySQL Server</td>
+              <td class="text-right">
+                <span class="font-weight-bold" id="installedMysqlVer">Loading...</span>
+                <button type="button" class="btn btn-xs btn-outline-secondary ml-2 quick-open-item" data-open-target="my_ini" title="Open my.ini in text editor">
+                  <i class="fas fa-file-code mr-1"></i> my.ini
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-tools text-secondary mr-2"></i> phpMyAdmin</td>
+              <td class="text-right font-weight-bold" id="installedPmaVer">Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-12">
+    <div class="card shadow-sm">
+      <div class="card-header border-0">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-folder mr-2 text-info"></i> Environment Paths
+        </h3>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-striped table-valign-middle mb-0">
+          <tbody>
+            <tr>
+              <td style="width: 35%;"><i class="fas fa-home text-muted mr-2"></i> Web Root (htdocs)</td>
+              <td>
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="font-weight-bold text-break mr-2">{{ config.htdocs_dir }}</small>
+                  <button type="button" class="btn btn-xs btn-outline-primary quick-open-item flex-shrink-0" data-open-target="htdocs" title="Explore htdocs in Windows File Explorer">
+                    <i class="fas fa-folder-open mr-1"></i> Open
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-folder-open text-muted mr-2"></i> Binaries Directory</td>
+              <td>
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="font-weight-bold text-break mr-2">{{ config.install_dir }}</small>
+                  <button type="button" class="btn btn-xs btn-outline-secondary quick-open-item flex-shrink-0" data-open-target="install_dir" title="Explore Binaries in Windows File Explorer">
+                    <i class="fas fa-folder-open mr-1"></i> Open
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-hdd text-muted mr-2"></i> MySQL Data Path</td>
+              <td>
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="font-weight-bold text-break mr-2">{{ config.mysql_data_dir }}</small>
+                  <button type="button" class="btn btn-xs btn-outline-secondary quick-open-item flex-shrink-0" data-open-target="mysql_data" title="Explore MySQL Data in Windows File Explorer">
+                    <i class="fas fa-folder-open mr-1"></i> Open
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-network-wired text-muted mr-2"></i> LAN Access</td>
+              <td>
+                <span class="badge {% if config.lan_access %}badge-success{% else %}badge-secondary{% endif %}">
+                  {% if config.lan_access %}Enabled (All Interfaces){% else %}Disabled (Localhost Only){% endif %}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

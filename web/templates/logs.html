@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}System Logs{% endblock %}
+{% block page_heading %}System Logs{% endblock %}
+{% block breadcrumb %}Logs{% endblock %}
+
+{% block content %}
+<div class="card card-outline card-secondary shadow-sm">
+  <div class="card-header border-0 d-flex flex-wrap justify-content-between align-items-center">
+    <div class="d-flex align-items-center my-1">
+      <h3 class="card-title font-weight-bold mr-3">
+        <i class="fas fa-file-alt mr-2 text-secondary"></i> Live Console Stream
+      </h3>
+      <div class="btn-group btn-group-sm mr-2" id="logLevelFilter">
+        <button class="btn btn-primary active" data-level="ALL">ALL</button>
+        <button class="btn btn-outline-primary" data-level="INFO">INFO</button>
+        <button class="btn btn-outline-warning" data-level="WARNING">WARN</button>
+        <button class="btn btn-outline-danger" data-level="ERROR">ERR</button>
+        <button class="btn btn-outline-secondary" data-level="SYS">SYS</button>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center my-1">
+      <div class="custom-control custom-checkbox mr-3">
+        <input type="checkbox" class="custom-control-input" id="autoScrollLogs" checked>
+        <label class="custom-control-label font-weight-normal text-sm" for="autoScrollLogs">Auto-scroll</label>
+      </div>
+      <button id="clearLogsBtn" class="btn btn-sm btn-outline-danger">
+        <i class="fas fa-trash-alt mr-1"></i> Clear Logs
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body pt-0">
+    <div class="console-output" id="logsOutput" style="min-height: 480px; max-height: 650px;">Loading logs...</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+  let currentLevel = 'ALL';
+  let pollInterval = null;
+
+  function fetchLogs() {
+    $.getJSON(`/api/logs?level=${currentLevel}&limit=200`, function(res) {
+      const container = $('#logsOutput');
+      if (!res.logs || !res.logs.length) {
+        container.html('<span class="text-muted">No log entries found.</span>');
+        return;
+      }
+
+      let html = '';
+      res.logs.forEach(entry => {
+        let levelClass = 'log-entry-info';
+        if (entry.level === 'ERROR') levelClass = 'log-entry-error';
+        else if (entry.level === 'WARNING') levelClass = 'log-entry-warning';
+        else if (entry.level === 'SYS') levelClass = 'log-entry-sys';
+
+        const safeMsg = entry.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        html += `[${entry.timestamp}] [${entry.level}] ${safeMsg}\n`;
+      });
+
+      container.text(html);
+
+      if ($('#autoScrollLogs').is(':checked')) {
+        container.scrollTop(container[0].scrollHeight);
+      }
+    });
+  }
+
+  $('#logLevelFilter button').on('click', function() {
+    $('#logLevelFilter button').removeClass('active btn-primary btn-warning btn-danger btn-secondary').addClass('btn-outline-secondary');
+    $(this).addClass('active btn-primary');
+    currentLevel = $(this).data('level');
+    fetchLogs();
+  });
+
+  $('#clearLogsBtn').on('click', function() {
+    $.post('/api/logs/clear', function() {
+      $('#logsOutput').text('Logs cleared.');
+    });
+  });
+
+  fetchLogs();
+  pollInterval = setInterval(fetchLogs, 2500);
+
+  $(window).on('beforeunload', function() {
+    clearInterval(pollInterval);
+  });
+});
+</script>
+{% endblock %}

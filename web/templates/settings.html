@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block title %}Settings{% endblock %}
+{% block page_heading %}Settings &amp; Configuration{% endblock %}
+{% block breadcrumb %}Settings{% endblock %}
+
+{% block content %}
+<form id="settingsForm">
+  <div class="row">
+    <!-- Server Ports & Network -->
+    <div class="col-lg-6 col-12">
+      <div class="card card-outline card-primary shadow-sm">
+        <div class="card-header border-0">
+          <h3 class="card-title font-weight-bold">
+            <i class="fas fa-network-wired mr-2 text-primary"></i> Ports &amp; Network
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="apachePort">Apache HTTP Port</label>
+            <input type="number" class="form-control" id="apachePort" name="apache_port" value="{{ config.apache_port }}" required>
+            <small class="form-text text-muted">Default is 80 (standard HTTP) or 8080.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="mysqlPort">MySQL Port</label>
+            <input type="number" class="form-control" id="mysqlPort" name="mysql_port" value="{{ config.mysql_port }}" required>
+            <small class="form-text text-muted">Default is 3306.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="webUiPort">PyAMPP Web UI Port</label>
+            <input type="number" class="form-control" id="webUiPort" name="web_ui_port" value="{{ config.web_ui_port or 5000 }}" required>
+            <small class="form-text text-muted">Port for this local management dashboard (default 5000).</small>
+          </div>
+
+          <div class="custom-control custom-switch mt-3">
+            <input type="checkbox" class="custom-control-input" id="lanAccess" name="lan_access" {% if config.lan_access %}checked{% endif %}>
+            <label class="custom-control-label font-weight-normal" for="lanAccess">Allow Local Network (LAN) Access</label>
+            <small class="form-text text-muted">When enabled, devices on your local Wi-Fi / subnet can access your Apache web server.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Directories & Storage -->
+    <div class="col-lg-6 col-12">
+      <div class="card card-outline card-info shadow-sm">
+        <div class="card-header border-0">
+          <h3 class="card-title font-weight-bold">
+            <i class="fas fa-folder mr-2 text-info"></i> Paths &amp; Directories
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="installDir">Installation Directory</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="installDir" name="install_dir" value="{{ install_root }}" required>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary browse-dir-btn" type="button" data-target="#installDir" data-strip-bin="true" title="Browse in Windows Explorer">
+                  <i class="fas fa-folder-open mr-1"></i> Browse
+                </button>
+              </div>
+            </div>
+            <small class="form-text text-muted">Where PyAMPP is installed (binaries are automatically placed in the \bin subfolder).</small>
+          </div>
+
+          <div class="form-group">
+            <label for="htdocsDir">Document Root (htdocs)</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="htdocsDir" name="htdocs_dir" value="{{ config.htdocs_dir }}" required>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary browse-dir-btn" type="button" data-target="#htdocsDir" title="Browse in Windows Explorer">
+                  <i class="fas fa-folder-open mr-1"></i> Browse
+                </button>
+              </div>
+            </div>
+            <small class="form-text text-muted">Where your website files and projects live.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="mysqlDataDir">MySQL Data Directory</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="mysqlDataDir" name="mysql_data_dir" value="{{ config.mysql_data_dir }}" required>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary browse-dir-btn" type="button" data-target="#mysqlDataDir" title="Browse in Windows Explorer">
+                  <i class="fas fa-folder-open mr-1"></i> Browse
+                </button>
+              </div>
+            </div>
+            <small class="form-text text-muted">Where MySQL tables and database data files reside.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Component Version Presets -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-outline card-secondary shadow-sm">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center">
+          <h3 class="card-title font-weight-bold">
+            <i class="fas fa-cubes mr-2 text-warning"></i> Component Presets
+          </h3>
+          <button type="button" id="checkUpdatesBtn" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-cloud-download-alt mr-1"></i> Check Preset Updates
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="phpPresetSelect">PHP Version</label>
+                <select class="form-control" id="phpPresetSelect">
+                  {% for ver, url in presets.PHP.items() %}
+                  <option value="{{ url }}" {% if config.php_url == url %}selected{% endif %}>{{ ver }}</option>
+                  {% endfor %}
+                  <option value="custom" {% if config.php_url not in presets.PHP.values() %}selected{% endif %}>Custom</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="apachePresetSelect">Apache Version</label>
+                <select class="form-control" id="apachePresetSelect">
+                  {% for ver, url in presets.Apache.items() %}
+                  <option value="{{ url }}" {% if config.apache_url == url %}selected{% endif %}>{{ ver }}</option>
+                  {% endfor %}
+                  <option value="custom" {% if config.apache_url not in presets.Apache.values() %}selected{% endif %}>Custom</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="mysqlPresetSelect">MySQL Version</label>
+                <select class="form-control" id="mysqlPresetSelect">
+                  {% for ver, url in presets.MySQL.items() %}
+                  <option value="{{ url }}" {% if config.mysql_url == url %}selected{% endif %}>{{ ver }}</option>
+                  {% endfor %}
+                  <option value="custom" {% if config.mysql_url not in presets.MySQL.values() %}selected{% endif %}>Custom</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="pmaPresetSelect">phpMyAdmin Version</label>
+                <select class="form-control" id="pmaPresetSelect">
+                  {% for ver, url in presets.phpMyAdmin.items() %}
+                  <option value="{{ url }}" {% if config.phpmyadmin_url == url %}selected{% endif %}>{{ ver }}</option>
+                  {% endfor %}
+                  <option value="custom" {% if config.phpmyadmin_url not in presets.phpMyAdmin.values() %}selected{% endif %}>Custom</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Collapsible Custom Download URLs -->
+          <div class="mt-2">
+            <button class="btn btn-sm btn-link text-decoration-none px-0 font-weight-bold" type="button" data-toggle="collapse" data-target="#customUrlsCollapse" aria-expanded="false" aria-controls="customUrlsCollapse">
+              <i class="fas fa-chevron-right mr-1" id="customUrlsToggleIcon"></i> Custom Download URLs (Advanced)
+            </button>
+
+            <div class="collapse mt-2" id="customUrlsCollapse">
+              <div class="card card-body bg-light">
+                <div class="form-group">
+                  <label for="phpUrlInput" class="text-sm">PHP Download URL</label>
+                  <input type="url" class="form-control form-control-sm" id="phpUrlInput" name="php_url" value="{{ config.php_url }}">
+                </div>
+                <div class="form-group">
+                  <label for="apacheUrlInput" class="text-sm">Apache Download URL</label>
+                  <input type="url" class="form-control form-control-sm" id="apacheUrlInput" name="apache_url" value="{{ config.apache_url }}">
+                </div>
+                <div class="form-group">
+                  <label for="mysqlUrlInput" class="text-sm">MySQL Download URL</label>
+                  <input type="url" class="form-control form-control-sm" id="mysqlUrlInput" name="mysql_url" value="{{ config.mysql_url }}">
+                </div>
+                <div class="form-group mb-0">
+                  <label for="pmaUrlInput" class="text-sm">phpMyAdmin Download URL</label>
+                  <input type="url" class="form-control form-control-sm" id="pmaUrlInput" name="phpmyadmin_url" value="{{ config.phpmyadmin_url }}">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer d-flex justify-content-end">
+          <button type="submit" id="saveSettingsBtn" class="btn btn-primary px-4 font-weight-bold">
+            <i class="fas fa-save mr-1"></i> Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+  // Preset dropdown listeners
+  $('#phpPresetSelect').on('change', function() {
+    const v = $(this).val();
+    if (v !== 'custom') $('#phpUrlInput').val(v);
+  });
+  $('#apachePresetSelect').on('change', function() {
+    const v = $(this).val();
+    if (v !== 'custom') $('#apacheUrlInput').val(v);
+  });
+  $('#mysqlPresetSelect').on('change', function() {
+    const v = $(this).val();
+    if (v !== 'custom') $('#mysqlUrlInput').val(v);
+  });
+  $('#pmaPresetSelect').on('change', function() {
+    const v = $(this).val();
+    if (v !== 'custom') $('#pmaUrlInput').val(v);
+  });
+
+  // Toggle icon rotation
+  $('#customUrlsCollapse').on('show.bs.collapse', function() {
+    $('#customUrlsToggleIcon').removeClass('fa-chevron-right').addClass('fa-chevron-down');
+  }).on('hide.bs.collapse', function() {
+    $('#customUrlsToggleIcon').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+  });
+
+  // Check preset updates
+  $('#checkUpdatesBtn').on('click', function() {
+    const btn = $(this);
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Checking...');
+
+    $.ajax({
+      url: '/api/updates/check',
+      type: 'POST',
+      success: function(res) {
+        if (res.success) {
+          PyAMPP.showAlert(res.message, 'success');
+          setTimeout(() => location.reload(), 1500);
+        } else {
+          PyAMPP.showAlert(res.message, 'info');
+        }
+      },
+      error: function() {
+        PyAMPP.showAlert('Could not check for preset updates.', 'error');
+      },
+      complete: function() {
+        btn.prop('disabled', false).html('<i class="fas fa-cloud-download-alt mr-1"></i> Check Preset Updates');
+      }
+    });
+  });
+
+  // Form submission
+  $('#settingsForm').on('submit', function(e) {
+    e.preventDefault();
+    const btn = $('#saveSettingsBtn');
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Saving...');
+
+    const data = {
+      apache_port: parseInt($('#apachePort').val(), 10),
+      mysql_port: parseInt($('#mysqlPort').val(), 10),
+      web_ui_port: parseInt($('#webUiPort').val(), 10),
+      lan_access: $('#lanAccess').is(':checked'),
+      htdocs_dir: $('#htdocsDir').val().trim(),
+      install_dir: $('#installDir').val().trim(),
+      mysql_data_dir: $('#mysqlDataDir').val().trim(),
+      php_url: $('#phpUrlInput').val().trim(),
+      apache_url: $('#apacheUrlInput').val().trim(),
+      mysql_url: $('#mysqlUrlInput').val().trim(),
+      phpmyadmin_url: $('#pmaUrlInput').val().trim()
+    };
+
+    $.ajax({
+      url: '/api/config',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      success: function(res) {
+        if (res.success) {
+          PyAMPP.showAlert(res.message, 'success');
+          if (typeof PyAMPP.fetchStatus === 'function') {
+            PyAMPP.fetchStatus();
+          }
+        } else {
+          PyAMPP.showAlert(res.message, 'error');
+        }
+      },
+      error: function(xhr) {
+        const msg = xhr.responseJSON ? xhr.responseJSON.message : 'Error updating settings.';
+        PyAMPP.showAlert(msg, 'error');
+      },
+      complete: function() {
+        btn.prop('disabled', false).html('<i class="fas fa-save mr-1"></i> Save Settings');
+      }
+    });
+  });
+});
+</script>
+{% endblock %}

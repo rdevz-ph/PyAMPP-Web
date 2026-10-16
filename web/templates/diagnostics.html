@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Diagnostics{% endblock %}
+{% block page_heading %}System Diagnostics{% endblock %}
+{% block breadcrumb %}Diagnostics{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Card 1: Service Health Diagnostics -->
+  <div class="col-lg-6 col-12">
+    <div class="card card-outline card-info shadow-sm">
+      <div class="card-header border-0 d-flex justify-content-between align-items-center">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-heartbeat mr-2 text-info"></i> Service Health Diagnostics
+        </h3>
+        <button id="runDiagnosticsBtn" class="btn btn-sm btn-info">
+          <i class="fas fa-play mr-1"></i> Run Diagnostics
+        </button>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush" id="diagnosticsList">
+          <li class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+            <div>
+              <span class="font-weight-bold d-block">Apache Port ({{ config.apache_port }})</span>
+              <small class="text-muted" id="diagApachePortDetail">Socket availability check</small>
+            </div>
+            <span class="badge badge-secondary" id="diagApachePortBadge">Pending</span>
+          </li>
+          <li class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+            <div>
+              <span class="font-weight-bold d-block">Apache HTTP Reachability</span>
+              <small class="text-muted" id="diagApacheHttpDetail">HTTP GET status probe</small>
+            </div>
+            <span class="badge badge-secondary" id="diagApacheHttpBadge">Pending</span>
+          </li>
+          <li class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+            <div>
+              <span class="font-weight-bold d-block">MySQL Port ({{ config.mysql_port }})</span>
+              <small class="text-muted" id="diagMysqlPortDetail">Socket availability check</small>
+            </div>
+            <span class="badge badge-secondary" id="diagMysqlPortBadge">Pending</span>
+          </li>
+          <li class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+            <div>
+              <span class="font-weight-bold d-block">MySQL TCP Latency</span>
+              <small class="text-muted" id="diagMysqlConnDetail">Connection response time</small>
+            </div>
+            <span class="badge badge-secondary" id="diagMysqlConnBadge">Pending</span>
+          </li>
+          <li class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+            <div>
+              <span class="font-weight-bold d-block">PHP CLI Binary</span>
+              <small class="text-muted" id="diagPhpDetail">PHP binary health &amp; version check</small>
+            </div>
+            <span class="badge badge-secondary" id="diagPhpBadge">Pending</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2: SSL Certificate & Handshake Tester -->
+  <div class="col-lg-6 col-12">
+    <div class="card card-outline card-primary shadow-sm">
+      <div class="card-header border-0">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-lock mr-2 text-primary"></i> SSL Certificate Checker
+        </h3>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group col-sm-8 col-12">
+            <label for="sslHostInput" class="text-sm">Host / Domain</label>
+            <input type="text" id="sslHostInput" class="form-control form-control-sm" value="localhost" placeholder="e.g. localhost or example.com">
+          </div>
+          <div class="form-group col-sm-4 col-12">
+            <label for="sslPortInput" class="text-sm">Port</label>
+            <input type="number" id="sslPortInput" class="form-control form-control-sm" value="443">
+          </div>
+        </div>
+        <button id="testSslBtn" class="btn btn-sm btn-primary mb-3">
+          <i class="fas fa-shield-alt mr-1"></i> Verify SSL Certificate
+        </button>
+
+        <div id="sslResultCard" class="card card-body bg-light text-sm p-3 d-none">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="font-weight-bold">Status:</span>
+            <span id="sslStatusBadge" class="badge badge-success">Valid</span>
+          </div>
+          <div class="mb-1"><strong>Subject:</strong> <span id="sslSubject">-</span></div>
+          <div class="mb-1"><strong>Issuer:</strong> <span id="sslIssuer">-</span></div>
+          <div class="mb-1"><strong>Valid Until:</strong> <span id="sslValidUntil">-</span></div>
+          <div class="mb-1"><strong>Days Remaining:</strong> <span id="sslDaysRemaining">-</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+  function runDiagnostics() {
+    const btn = $('#runDiagnosticsBtn');
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Testing...');
+
+    $.getJSON('/api/diagnostics/run', function(res) {
+      if (res.apache_port) {
+        $('#diagApachePortBadge').attr('class', `badge ${res.apache_port.ok ? 'badge-success' : 'badge-danger'}`).text(res.apache_port.status);
+        $('#diagApachePortDetail').text(res.apache_port.detail);
+      }
+      if (res.apache_http) {
+        $('#diagApacheHttpBadge').attr('class', `badge ${res.apache_http.ok ? 'badge-success' : 'badge-warning'}`).text(res.apache_http.status);
+        $('#diagApacheHttpDetail').text(res.apache_http.detail);
+      }
+      if (res.mysql_port) {
+        $('#diagMysqlPortBadge').attr('class', `badge ${res.mysql_port.ok ? 'badge-success' : 'badge-danger'}`).text(res.mysql_port.status);
+        $('#diagMysqlPortDetail').text(res.mysql_port.detail);
+      }
+      if (res.mysql_conn) {
+        $('#diagMysqlConnBadge').attr('class', `badge ${res.mysql_conn.ok ? 'badge-success' : 'badge-warning'}`).text(res.mysql_conn.status);
+        $('#diagMysqlConnDetail').text(res.mysql_conn.detail);
+      }
+      if (res.php_cli) {
+        $('#diagPhpBadge').attr('class', `badge ${res.php_cli.ok ? 'badge-success' : 'badge-danger'}`).text(res.php_cli.status);
+        $('#diagPhpDetail').text(res.php_cli.detail);
+      }
+    }).always(function() {
+      btn.prop('disabled', false).html('<i class="fas fa-play mr-1"></i> Run Diagnostics');
+    });
+  }
+
+  $('#testSslBtn').on('click', function() {
+    const host = $('#sslHostInput').val().trim();
+    const port = parseInt($('#sslPortInput').val(), 10) || 443;
+    const btn = $(this);
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Checking SSL...');
+
+    $.ajax({
+      url: '/api/diagnostics/ssl',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({ host: host, port: port }),
+      success: function(res) {
+        const card = $('#sslResultCard');
+        card.removeClass('d-none');
+        if (res.valid) {
+          $('#sslStatusBadge').attr('class', 'badge badge-success').text('Valid');
+          $('#sslSubject').text(res.subject || '-');
+          $('#sslIssuer').text(res.issuer || '-');
+          $('#sslValidUntil').text(res.expires || '-');
+          $('#sslDaysRemaining').text(res.days_left + ' days');
+        } else {
+          $('#sslStatusBadge').attr('class', 'badge badge-danger').text('Error / Invalid');
+          $('#sslSubject').text(res.error || 'Connection failed');
+          $('#sslIssuer').text('-');
+          $('#sslValidUntil').text('-');
+          $('#sslDaysRemaining').text('-');
+        }
+      },
+      error: function() {
+        PyAMPP.showAlert('SSL check request failed.', 'error');
+      },
+      complete: function() {
+        btn.prop('disabled', false).html('<i class="fas fa-shield-alt mr-1"></i> Verify SSL Certificate');
+      }
+    });
+  });
+
+  $('#runDiagnosticsBtn').on('click', runDiagnostics);
+
+  // Run automatically on open
+  runDiagnostics();
+});
+</script>
+{% endblock %}
