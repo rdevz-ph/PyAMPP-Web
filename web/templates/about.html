@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+{% block page_heading %}About PyAMPP{% endblock %}
+{% block breadcrumb %}About{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Hero / Overview Card -->
+  <div class="col-12">
+    <div class="card card-outline card-primary shadow-sm">
+      <div class="card-body">
+        <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start">
+          <img src="/static/dist/img/pyampp_logo.png" alt="PyAMPP Logo" class="elevation-2 rounded mb-3 mb-md-0 mr-md-4" style="width: 100px; height: 100px; object-fit: contain;">
+          <div class="flex-grow-1 text-center text-md-left">
+            <div class="d-flex flex-column flex-sm-row align-items-center align-items-md-start justify-content-between">
+              <div>
+                <h2 class="font-weight-bold mb-1">PyAMPP</h2>
+                <p class="text-muted mb-2">Portable Web Development Stack Manager for Windows</p>
+              </div>
+              <div class="mb-2 mb-sm-0">
+                <span class="badge badge-primary px-3 py-2 font-weight-bold" style="font-size: 0.9rem;">v{{ version }}</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <span class="badge badge-info mr-1"><i class="fab fa-windows mr-1"></i> Windows 10 / 11 (64-bit)</span>
+              <span class="badge badge-secondary mr-1"><i class="fab fa-python mr-1"></i> Python 3.10+</span>
+              <span class="badge badge-success"><i class="fas fa-file-contract mr-1"></i> MIT License</span>
+            </div>
+            <p class="mb-3">
+              PyAMPP is a lightweight, portable development environment designed to run Apache, MySQL, PHP, and phpMyAdmin on Windows without virtualization or rigid installers. Everything runs natively with full directory portability and an intuitive browser-based control dashboard.
+            </p>
+            <div class="d-flex flex-wrap justify-content-center justify-content-md-start">
+              <a href="https://github.com/rdevz-ph/PyAMPP-Web" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm mr-2 mb-2">
+                <i class="fab fa-github mr-1"></i> GitHub Repository <i class="fas fa-external-link-alt ml-1 fa-xs text-muted"></i>
+              </a>
+              <a href="https://github.com/rdevz-ph/PyAMPP-Web/releases" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm mr-2 mb-2">
+                <i class="fas fa-tag mr-1"></i> Releases <i class="fas fa-external-link-alt ml-1 fa-xs text-muted"></i>
+              </a>
+              <a href="https://rdevz-ph.github.io/PyAMPP-Web/" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info btn-sm mr-2 mb-2">
+                <i class="fas fa-book mr-1"></i> Documentation <i class="fas fa-external-link-alt ml-1 fa-xs text-muted"></i>
+              </a>
+              <a href="https://github.com/rdevz-ph/PyAMPP-Web/issues" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm mb-2">
+                <i class="fas fa-bug mr-1"></i> Report an Issue <i class="fas fa-external-link-alt ml-1 fa-xs text-muted"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <!-- Name Meaning & Stack Explanation -->
+  <div class="col-lg-7 col-12">
+    <div class="card card-outline card-info shadow-sm h-100">
+      <div class="card-header border-0">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-layer-group mr-2 text-info"></i> Why It Is Called PyAMPP
+        </h3>
+      </div>
+      <div class="card-body">
+        <p>
+          The name <strong>PyAMPP</strong> represents the combination of <strong>Python</strong> with the traditional <strong>WAMP</strong> (Windows, Apache, MySQL, PHP) web development stack:
+        </p>
+
+        <div class="table-responsive mb-3">
+          <table class="table table-bordered table-sm mb-0">
+            <thead class="thead-light">
+              <tr>
+                <th style="width: 70px;" class="text-center">Letter</th>
+                <th style="width: 160px;">Component</th>
+                <th>Role in the Stack</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center font-weight-bold text-primary" style="font-size: 1.1rem;">Py</td>
+                <td><strong>Python</strong></td>
+                <td>Orchestration engine, service process supervisor, and local web controller.</td>
+              </tr>
+              <tr>
+                <td class="text-center font-weight-bold text-danger" style="font-size: 1.1rem;">A</td>
+                <td><strong>Apache</strong></td>
+                <td>High-performance HTTP and HTTPS web server delivering your local websites.</td>
+              </tr>
+              <tr>
+                <td class="text-center font-weight-bold text-info" style="font-size: 1.1rem;">M</td>
+                <td><strong>MySQL</strong></td>
+                <td>Relational database management system for persistent data storage.</td>
+              </tr>
+              <tr>
+                <td class="text-center font-weight-bold text-primary" style="font-size: 1.1rem;">P</td>
+                <td><strong>PHP</strong></td>
+                <td>Fast server-side scripting language runtime for dynamic web applications.</td>
+              </tr>
+              <tr>
+                <td class="text-center font-weight-bold text-warning" style="font-size: 1.1rem;">P</td>
+                <td><strong>phpMyAdmin</strong></td>
+                <td>Web-based database management interface for running SQL queries and tables.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h6 class="font-weight-bold mb-2">How PyAMPP Differs from Traditional WAMP</h6>
+        <p class="text-muted mb-0">
+          Traditional WAMP stacks often require heavy Windows service installations, complex registry dependencies, and manual configuration file editing. PyAMPP replaces fragile system-level bindings with a Python management layer. It handles process life-cycles natively, automates configuration wiring on the fly, and allows your entire web stack to remain truly portable.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Developer & Environment Info -->
+  <div class="col-lg-5 col-12 mt-3 mt-lg-0">
+    <!-- Developer Info Card -->
+    <div class="card card-outline card-success shadow-sm mb-3">
+      <div class="card-header border-0">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-user-circle mr-2 text-success"></i> Developer Information
+        </h3>
+      </div>
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <div class="bg-light rounded-circle p-3 mr-3 border d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+            <i class="fas fa-code text-success" style="font-size: 1.4rem;"></i>
+          </div>
+          <div>
+            <h5 class="font-weight-bold mb-0">rdevz-ph</h5>
+            <small class="text-muted">Creator and Project Maintainer</small>
+          </div>
+        </div>
+        <p class="text-muted small mb-3">
+          PyAMPP is developed and maintained by <strong>rdevz-ph</strong> as an active open-source project, serving as the web-based continuation of the original PyAMPP-Windows application.
+        </p>
+        <a href="https://github.com/rdevz-ph" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success btn-sm btn-block">
+          <i class="fab fa-github mr-1"></i> Visit GitHub Profile <i class="fas fa-external-link-alt ml-1 fa-xs"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Active Environment Card -->
+    <div class="card card-outline card-secondary shadow-sm mb-0">
+      <div class="card-header border-0">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-desktop mr-2 text-secondary"></i> Current Environment
+        </h3>
+      </div>
+      <div class="card-body p-0">
+        <ul class="list-group list-group-flush small">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span class="text-muted">Application Version</span>
+            <span class="font-weight-bold">{{ version }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span class="text-muted">Management Server Port</span>
+            <span class="font-weight-bold">{{ config.web_ui_port or 5000 }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span class="text-muted">Installation Directory</span>
+            <span class="font-weight-bold text-truncate ml-2" style="max-width: 200px;" title="{{ install_root }}">{{ install_root }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span class="text-muted">Document Root (htdocs)</span>
+            <span class="font-weight-bold text-truncate ml-2" style="max-width: 200px;" title="{{ config.htdocs_dir }}">{{ config.htdocs_dir }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <!-- Credits & Upstream Sources -->
+  <div class="col-12">
+    <div class="card card-outline card-primary shadow-sm">
+      <div class="card-header border-0">
+        <h3 class="card-title font-weight-bold">
+          <i class="fas fa-heart mr-2 text-danger"></i> Credits &amp; Upstream Sources
+        </h3>
+      </div>
+      <div class="card-body">
+        <p class="text-muted mb-3">
+          PyAMPP is built upon official binaries and open-source projects provided by their respective maintainers and communities:
+        </p>
+        <div class="row">
+          <!-- PHP -->
+          <div class="col-md-6 col-lg-4 mb-3">
+            <div class="credit-item">
+              <div class="d-flex align-items-center mb-2">
+                <i class="fab fa-php text-primary mr-2" style="font-size: 1.4rem;"></i>
+                <h6 class="font-weight-bold mb-0">PHP for Windows</h6>
+              </div>
+              <p class="small text-muted mb-2">
+                Official Windows Thread-Safe binaries and build archives.
+              </p>
+              <div class="small">
+                <strong>Source:</strong> <a href="https://windows.php.net" target="_blank" rel="noopener noreferrer">windows.php.net <i class="fas fa-external-link-alt fa-xs"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apache -->
+          <div class="col-md-6 col-lg-4 mb-3">
+            <div class="credit-item">
+              <div class="d-flex align-items-center mb-2">
+                <i class="fas fa-feather-alt text-danger mr-2" style="font-size: 1.4rem;"></i>
+                <h6 class="font-weight-bold mb-0">Apache HTTP Server</h6>
+              </div>
+              <p class="small text-muted mb-2">
+                Windows binaries compiled by Apache Lounge with Visual C++ runtimes.
+              </p>
+              <div class="small">
+                <strong>Source:</strong> <a href="https://www.apachelounge.com" target="_blank" rel="noopener noreferrer">apachelounge.com <i class="fas fa-external-link-alt fa-xs"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- MySQL -->
+          <div class="col-md-6 col-lg-4 mb-3">
+            <div class="credit-item">
+              <div class="d-flex align-items-center mb-2">
+                <i class="fas fa-database text-info mr-2" style="font-size: 1.4rem;"></i>
+                <h6 class="font-weight-bold mb-0">MySQL Community Server</h6>
+              </div>
+              <p class="small text-muted mb-2">
+                Official standalone Windows x64 community server distributions.
+              </p>
+              <div class="small">
+                <strong>Source:</strong> <a href="https://dev.mysql.com/downloads/" target="_blank" rel="noopener noreferrer">dev.mysql.com <i class="fas fa-external-link-alt fa-xs"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- phpMyAdmin -->
+          <div class="col-md-6 col-lg-4 mb-3 mb-lg-0">
+            <div class="credit-item">
+              <div class="d-flex align-items-center mb-2">
+                <i class="fas fa-tools text-warning mr-2" style="font-size: 1.4rem;"></i>
+                <h6 class="font-weight-bold mb-0">phpMyAdmin</h6>
+              </div>
+              <p class="small text-muted mb-2">
+                Web-based database administration interface and SQL query tool.
+              </p>
+              <div class="small">
+                <strong>Source:</strong> <a href="https://www.phpmyadmin.net" target="_blank" rel="noopener noreferrer">phpmyadmin.net <i class="fas fa-external-link-alt fa-xs"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- AdminLTE 3 -->
+          <div class="col-md-6 col-lg-4 mb-3 mb-lg-0 mb-md-0">
+            <div class="credit-item">
+              <div class="d-flex align-items-center mb-2">
+                <i class="fas fa-columns text-primary mr-2" style="font-size: 1.4rem;"></i>
+                <h6 class="font-weight-bold mb-0">AdminLTE 3</h6>
+              </div>
+              <p class="small text-muted mb-2">
+                Open-source responsive control panel and dashboard template.
+              </p>
+              <div class="small">
+                <strong>Source:</strong> <a href="https://adminlte.io" target="_blank" rel="noopener noreferrer">adminlte.io <i class="fas fa-external-link-alt fa-xs"></i></a> | <a href="https://github.com/ColorlibHQ/AdminLTE" target="_blank" rel="noopener noreferrer">GitHub <i class="fas fa-external-link-alt fa-xs"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Supporting Libraries -->
+          <div class="col-md-6 col-lg-4 mb-0">
+            <div class="credit-item">
+              <div class="d-flex align-items-center mb-2">
+                <i class="fas fa-cubes text-secondary mr-2" style="font-size: 1.4rem;"></i>
+                <h6 class="font-weight-bold mb-0">Supporting Libraries</h6>
+              </div>
+              <p class="small text-muted mb-2">
+                Interface icon set, CSS framework, and client interaction components.
+              </p>
+              <div class="small">
+                <a href="https://fontawesome.com" target="_blank" rel="noopener noreferrer">Font Awesome</a> &bull;
+                <a href="https://getbootstrap.com" target="_blank" rel="noopener noreferrer">Bootstrap 4</a> &bull;
+                <a href="https://jquery.com" target="_blank" rel="noopener noreferrer">jQuery</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <!-- Disclaimer -->
+  <div class="col-12">
+    <div class="card card-outline card-warning shadow-sm">
+      <div class="card-header border-0 py-2">
+        <h3 class="card-title font-weight-bold text-warning" style="font-size: 1rem;">
+          <i class="fas fa-exclamation-triangle mr-2"></i> Disclaimer
+        </h3>
+      </div>
+      <div class="card-body pt-0 pb-3">
+        <p class="mb-1 text-muted small">
+          PyAMPP is engineered exclusively for local development, testing, and debugging purposes on Windows workstations.
+        </p>
+        <p class="mb-0 text-muted small">
+          The default configuration is optimized for accessibility and developer convenience rather than hardened security. Do not use PyAMPP as a public production server facing the internet.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

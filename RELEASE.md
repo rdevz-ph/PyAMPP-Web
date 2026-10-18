@@ -1,6 +1,10 @@
-# PyAMPP 1.0.0-web Release Notes
+# PyAMPP 1.0.1-web Release Notes
 
-PyAMPP 1.0.0-web is the initial release of the portable web development stack manager for Windows. It provides a browser-based management dashboard and a lightweight system tray controller to install, configure, and run Apache, MySQL, PHP, and phpMyAdmin without editing configuration files manually.
+## What's New
+
+### Added
+* Added a dedicated About page displaying application details, current environment paths, stack name breakdown, developer profile, and upstream credits.
+* Added an About navigation link to the web management dashboard sidebar.
 
 ## Key Features
 

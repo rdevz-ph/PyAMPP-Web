@@ -2,6 +2,12 @@
 
 All notable changes to PyAMPP will be documented in this file.
 
+## [1.0.1-web] - 2026-10-18
+
+### Added
+* Added a dedicated About page displaying application details, current environment paths, stack name breakdown, developer profile, and upstream credits.
+* Added an About navigation link to the web management dashboard sidebar.
+
 ## [1.0.0-web] - 2026-10-17
 
 ### Added

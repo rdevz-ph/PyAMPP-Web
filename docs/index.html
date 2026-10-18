@@ -32,7 +32,7 @@
                 <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white" alt="Python">
                 <img src="https://img.shields.io/badge/Interface-Web%20Dashboard%20%26%20Tray-4f46e5" alt="Interface">
                 <img src="https://img.shields.io/badge/License-MIT-059669" alt="License">
-                <img src="https://img.shields.io/badge/Version-1.0.0--web-f59e0b" alt="Version">
+                <img src="https://img.shields.io/badge/Version-1.0.1--web-f59e0b" alt="Version">
             </div>
             <div class="slideshow-container" onmouseenter="pauseSlideshow()" onmouseleave="startSlideshow()">
                 <div class="slide fade">
@@ -95,7 +95,8 @@
                 <li><a href="#technical">Requirements</a></li>
                 <li><a href="#architecture">Architecture</a></li>
                 <li><a href="#faq">FAQ</a></li>
-                <li><a href="#legal">License & Disclaimer</a></li>
+                <li><a href="#credits">Credits</a></li>
+                <li><a href="#legal">License &amp; Disclaimer</a></li>
             </ul>
         </aside>
 
@@ -200,6 +201,18 @@
             <section id="faq">
                 <h2>Frequently Asked Questions</h2>
                 <div class="faq-item">
+                    <h4>Why is it called PyAMPP?</h4>
+                    <p>The name <strong>PyAMPP</strong> represents the combination of <strong>Python</strong> with the traditional <strong>WAMP</strong> (Windows, Apache, MySQL, PHP) web development stack:</p>
+                    <ul>
+                        <li><strong>Py (Python):</strong> Orchestration engine, service process supervisor, and local web controller.</li>
+                        <li><strong>A (Apache):</strong> High-performance HTTP and HTTPS web server delivering your local websites.</li>
+                        <li><strong>M (MySQL):</strong> Relational database management system for persistent data storage.</li>
+                        <li><strong>P (PHP):</strong> Fast server-side scripting language runtime for dynamic web applications.</li>
+                        <li><strong>P (phpMyAdmin):</strong> Web-based database management interface for running SQL queries and tables.</li>
+                    </ul>
+                    <p>Traditional WAMP stacks often require heavy Windows service installations, complex registry dependencies, and manual configuration file editing. PyAMPP replaces fragile system-level bindings with a Python management layer. It handles process life-cycles natively, automates configuration wiring on the fly, and allows your entire web stack to remain truly portable.</p>
+                </div>
+                <div class="faq-item">
                     <h4>Why use PyAMPP instead of Docker?</h4>
                     <p>Docker is powerful, but it requires significant disk space and virtualization overhead. PyAMPP runs natively on Windows without virtualization, making it lighter and faster to start for everyday PHP development.</p>
                 </div>
@@ -214,6 +227,43 @@
                 <div class="faq-item">
                     <h4>Do I need Administrator rights?</h4>
                     <p>No. Normal everyday development and service management do not require administrator rights. Administrator rights are only requested when adding or removing PHP from the Windows system PATH.</p>
+                </div>
+            </section>
+
+            <section id="credits">
+                <h2>Credits &amp; Upstream Sources</h2>
+                <p>PyAMPP is built upon official binaries and open-source projects provided by their respective maintainers and communities:</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>PHP for Windows</h4>
+                        <p>Official Windows Thread-Safe binaries and build archives.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Source:</strong> <a href="https://windows.php.net" target="_blank" rel="noopener noreferrer">windows.php.net</a></p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Apache HTTP Server</h4>
+                        <p>Windows binaries compiled by Apache Lounge with Visual C++ runtimes.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Source:</strong> <a href="https://www.apachelounge.com" target="_blank" rel="noopener noreferrer">apachelounge.com</a></p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>MySQL Community Server</h4>
+                        <p>Official standalone Windows x64 community server distributions.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Source:</strong> <a href="https://dev.mysql.com/downloads/" target="_blank" rel="noopener noreferrer">dev.mysql.com</a></p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>phpMyAdmin</h4>
+                        <p>Web-based database administration interface and SQL query tool.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Source:</strong> <a href="https://www.phpmyadmin.net" target="_blank" rel="noopener noreferrer">phpmyadmin.net</a></p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>AdminLTE 3</h4>
+                        <p>Open-source responsive control panel and dashboard template.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Source:</strong> <a href="https://adminlte.io" target="_blank" rel="noopener noreferrer">adminlte.io</a> | <a href="https://github.com/ColorlibHQ/AdminLTE" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Supporting Libraries</h4>
+                        <p>Interface icon set, CSS framework, and client interaction components.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><a href="https://fontawesome.com" target="_blank" rel="noopener noreferrer">Font Awesome</a> &bull; <a href="https://getbootstrap.com" target="_blank" rel="noopener noreferrer">Bootstrap 4</a> &bull; <a href="https://jquery.com" target="_blank" rel="noopener noreferrer">jQuery</a></p>
+                    </div>
                 </div>
             </section>
 

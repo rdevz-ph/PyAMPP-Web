@@ -8,7 +8,7 @@
   ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
   ![Interface](https://img.shields.io/badge/Interface-Web%20Dashboard%20%26%20Tray-4f46e5)
   ![License](https://img.shields.io/badge/License-MIT-059669)
-  ![Version](https://img.shields.io/badge/Version-1.0.0--web-f59e0b)
+  ![Version](https://img.shields.io/badge/Version-1.0.1--web-f59e0b)
 </div>
 
 > [!NOTE]
@@ -122,6 +122,17 @@ For guides and more information, visit the [PyAMPP Documentation site](https://r
 
 ## Frequently Asked Questions
 
+### Why is it called PyAMPP?
+The name PyAMPP represents the combination of Python with the traditional WAMP (Windows, Apache, MySQL, PHP) web development stack:
+
+- **Py (Python):** Orchestration engine, service process supervisor, and local web controller.
+- **A (Apache):** High-performance HTTP and HTTPS web server delivering your local websites.
+- **M (MySQL):** Relational database management system for persistent data storage.
+- **P (PHP):** Fast server-side scripting language runtime for dynamic web applications.
+- **P (phpMyAdmin):** Web-based database management interface for running SQL queries and tables.
+
+Traditional WAMP stacks often require heavy Windows service installations, complex registry dependencies, and manual configuration file editing. PyAMPP replaces fragile system-level bindings with a Python management layer. It handles process life-cycles natively, automates configuration wiring on the fly, and allows your entire web stack to remain truly portable.
+
 ### Why use PyAMPP instead of Docker?
 Docker is powerful, but it requires significant disk space and virtualization overhead. PyAMPP runs natively on Windows without virtualization, making it lighter and faster to start for everyday PHP development.
 
@@ -133,6 +144,17 @@ Yes. You can use the default version presets or enter custom download links in t
 
 ### Do I need Administrator rights to run PyAMPP?
 No. Daily development and service management do not require administrator rights. Administrator rights are only requested when adding or removing PHP from the Windows system PATH.
+
+## Credits
+
+PyAMPP is built upon official binaries and open-source projects provided by their respective maintainers and communities:
+
+- **PHP for Windows:** Official Windows Thread-Safe binaries and build archives ([windows.php.net](https://windows.php.net)).
+- **Apache HTTP Server:** Windows binaries compiled by Apache Lounge with Visual C++ runtimes ([apachelounge.com](https://www.apachelounge.com)).
+- **MySQL Community Server:** Official standalone Windows x64 community server distributions ([dev.mysql.com](https://dev.mysql.com/downloads/)).
+- **phpMyAdmin:** Web-based database administration interface and SQL query tool ([phpmyadmin.net](https://www.phpmyadmin.net)).
+- **AdminLTE 3:** Open-source responsive control panel and dashboard template ([adminlte.io](https://adminlte.io) / [GitHub](https://github.com/ColorlibHQ/AdminLTE)).
+- **Supporting Libraries:** Interface icon set, CSS framework, and client interaction components ([Font Awesome](https://fontawesome.com), [Bootstrap 4](https://getbootstrap.com), and [jQuery](https://jquery.com)).
 
 ## License
 

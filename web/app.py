@@ -144,6 +144,10 @@ def create_app():
     def wizard():
         return render_template("wizard.html", active_page="wizard")
 
+    @app.route("/about")
+    def about():
+        return render_template("about.html", active_page="about")
+
     # ==========================================
     # JSON API Routes
     # ==========================================

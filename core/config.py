@@ -30,7 +30,7 @@ def get_appdata_dir():
 BASE_DIR = get_base_dir()
 APPDATA_DIR = get_appdata_dir()
 DATA_DIR = BASE_DIR / "data"
-VERSION = "1.0.0-web"
+VERSION = "1.0.1-web"
 
 
 def get_system_php_path():
