@@ -81,7 +81,7 @@ Download the latest version from the [Releases](https://github.com/rdevz-ph/PyAM
 
 PyAMPP includes tested download presets for the following components:
 
-- **PHP:** 8.5.6, 8.4.21, 8.3.31, 8.2.31, 8.1.34, 8.0.30, and 7.4.33
+- **PHP:** 8.5.12, 8.4.27, 8.3.36, 8.2.35, 8.1.34, 8.0.30, and 7.4.33
 - **Apache:** 2.4.66
 - **MySQL:** 8.4.4, 8.0.40, and 5.7.44
 - **phpMyAdmin:** 5.2.3, 5.2.2, and 5.2.1

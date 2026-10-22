@@ -90,7 +90,7 @@ DEFAULT_CONFIG = {
     "mysql_port": 3306,
     "apache_url": "https://www.apachelounge.com/download/VS17/binaries/httpd-2.4.66-251206-Win64-VS17.zip",
     "mysql_url": "https://downloads.mysql.com/archives/get/p/23/file/mysql-8.4.4-winx64.zip",
-    "php_url": "https://downloads.php.net/~windows/releases/archives/php-8.5.6-Win32-vs17-x64.zip",
+    "php_url": "https://downloads.php.net/~windows/releases/archives/php-8.5.12-Win32-vs17-x64.zip",
     "phpmyadmin_url": "https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip",
     "install_dir": "C:\\PyAMPP\\bin",
     "mysql_data_dir": "C:\\PyAMPP\\mysql_data",
@@ -105,10 +105,10 @@ DEFAULT_CONFIG = {
 
 COMPONENTS_PRESETS = {
     "PHP": {
-        "8.5.6": "https://downloads.php.net/~windows/releases/archives/php-8.5.6-Win32-vs17-x64.zip",
-        "8.4.21": "https://downloads.php.net/~windows/releases/archives/php-8.4.21-Win32-vs17-x64.zip",
-        "8.3.31": "https://downloads.php.net/~windows/releases/archives/php-8.3.31-Win32-vs16-x64.zip",
-        "8.2.31": "https://downloads.php.net/~windows/releases/archives/php-8.2.31-Win32-vs16-x64.zip",
+        "8.5.12": "https://downloads.php.net/~windows/releases/archives/php-8.5.12-Win32-vs17-x64.zip",
+        "8.4.27": "https://downloads.php.net/~windows/releases/archives/php-8.4.27-Win32-vs17-x64.zip",
+        "8.3.36": "https://downloads.php.net/~windows/releases/archives/php-8.3.36-Win32-vs16-x64.zip",
+        "8.2.35": "https://downloads.php.net/~windows/releases/archives/php-8.2.35-Win32-vs16-x64.zip",
         "8.1.34": "https://windows.php.net/downloads/releases/php-8.1.34-Win32-vs16-x64.zip",
         "8.0.30 (Archive)": "https://windows.php.net/downloads/releases/archives/php-8.0.30-Win32-vs16-x64.zip",
         "7.4.33 (Archive)": "https://windows.php.net/downloads/releases/archives/php-7.4.33-Win32-vc15-x64.zip",
