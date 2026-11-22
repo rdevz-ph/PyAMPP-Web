@@ -3,14 +3,34 @@ import sys
 import subprocess
 import shutil
 import customtkinter
+from PIL import Image
 from pathlib import Path
 from core.config import VERSION
+
+def generate_multi_dpi_icon(master_image_path: str = "docs/images/pyampp.png", output_ico_path: str = "app.ico"):
+    """
+    Packages all 9 standard Windows icon frames into a single .ico file
+    to prevent blurry scaling across High-DPI and standard displays.
+    """
+    if not os.path.exists(master_image_path):
+        return
+    try:
+        master = Image.open(master_image_path).convert("RGBA")
+        sizes = [256, 128, 64, 48, 40, 32, 24, 20, 16]
+        frames = [(s, s) for s in sizes]
+        master.save(output_ico_path, format="ICO", sizes=frames)
+        print(f"Generated multi-frame icon ({len(sizes)} frames): {output_ico_path}")
+    except Exception as e:
+        print(f"Notice: Could not regenerate icon: {e}")
 
 def build():
     # Application settings
     app_name = f"PyAMPP_{VERSION}"
     main_script = "main.py"
     icon_path = "app.ico" 
+
+    # Generate multi-resolution icon frames before building
+    generate_multi_dpi_icon("docs/images/pyampp.png", icon_path) 
 
     # Get CustomTkinter path
     ctk_path = os.path.dirname(customtkinter.__file__)

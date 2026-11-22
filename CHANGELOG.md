@@ -2,6 +2,19 @@
 
 All notable changes to PyAMPP will be documented in this file.
 
+## [1.0.2-web] - 2026-11-23
+
+### Added
+* Added an Auto-open webpage on launch preference checkbox in the controller window to open the web management dashboard automatically when the server starts.
+* Added native High-DPI display scaling support and an explicit Application User Model ID on Windows so taskbar icons and text render crisply on high-resolution monitors.
+* Added a 9-frame multi-resolution icon generator in the build script to package icons at all standard Windows DPI scaling sizes.
+* Added support for PHP 8.6.0 download presets.
+
+### Changed
+* Updated PHP version presets to the latest security releases: PHP 8.5.13, 8.4.28, 8.3.37, and 8.2.36.
+* Moved PHP 8.1.34 to archived releases in download presets.
+* Updated window title bar and taskbar icon rendering using native Win32 messages to eliminate blurry icon scaling in desktop windows.
+
 ## [1.0.1-web] - 2026-10-18
 
 ### Added

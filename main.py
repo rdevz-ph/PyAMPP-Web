@@ -27,6 +27,26 @@ if len(sys.argv) > 1 and sys.argv[1] == "--pick-folder":
     sys.exit(0)
 
 import socket
+import sys
+
+# Enable High-DPI awareness and set explicit Application User Model ID on Windows
+if sys.platform == "win32" or os.name == "nt":
+    try:
+        import ctypes
+        # Per-monitor DPI awareness (Windows 8.1+)
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+    except Exception:
+        try:
+            # System DPI awareness fallback (Windows Vista, 7, 8)
+            ctypes.windll.user32.SetProcessDPIAware()
+        except Exception:
+            pass
+
+    try:
+        app_id = "rdevz.pyampp.servercontroller.1.0"
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+    except Exception:
+        pass
 
 # Add the project root to sys.path to allow imports from core and gui
 project_root = os.path.dirname(os.path.abspath(__file__))

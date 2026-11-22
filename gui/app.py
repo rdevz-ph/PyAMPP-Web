@@ -10,6 +10,23 @@ from tkinter import messagebox
 import pystray
 from pystray import MenuItem as item
 
+# Ensure High-DPI awareness and explicit Application User Model ID on Windows
+if sys.platform == "win32" or os.name == "nt":
+    try:
+        import ctypes
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+    except Exception:
+        try:
+            ctypes.windll.user32.SetProcessDPIAware()
+        except Exception:
+            pass
+
+    try:
+        app_id = "rdevz.pyampp.servercontroller.1.0"
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+    except Exception:
+        pass
+
 from core.config import RESOURCE_DIR, config_manager, VERSION
 from core.web_server import web_server_manager
 from core.apache_manager import ApacheManager
@@ -39,7 +56,11 @@ class PyAMPP(ctk.CTk):
         if not self.icon_path.exists():
             self.icon_path = Path(__file__).parent.parent / "app.ico"
         if self.icon_path.exists():
-            self.iconbitmap(str(self.icon_path))
+            try:
+                self.iconbitmap(str(self.icon_path))
+            except Exception:
+                pass
+            self.apply_win32_icon(self.icon_path)
 
         # Core service managers for exit cleanup
         self.apache = ApacheManager()
@@ -57,7 +78,7 @@ class PyAMPP(ctk.CTk):
 
         # Auto-start web server if enabled
         if config_manager.get("web_ui_autostart", True):
-            self.after(200, self.start_server_action)
+            self.after(200, lambda: self.start_server_action(on_launch=True))
 
         # Check for application updates in the background
         self.check_for_updates_async()
@@ -243,6 +264,18 @@ class PyAMPP(ctk.CTk):
         else:
             self.autostart_chk.deselect()
 
+        self.auto_open_chk = ctk.CTkCheckBox(
+            self.pref_frame,
+            text="Auto-open webpage on launch",
+            font=ctk.CTkFont(size=12),
+            command=self.save_preferences
+        )
+        self.auto_open_chk.pack(anchor="w", pady=2)
+        if config_manager.get("web_ui_open_browser", False):
+            self.auto_open_chk.select()
+        else:
+            self.auto_open_chk.deselect()
+
         # Responsive spacer to absorb extra height when window expands
         self.spacer = ctk.CTkFrame(self, fg_color="transparent")
         self.spacer.grid(row=6, column=0, sticky="nsew")
@@ -328,7 +361,7 @@ class PyAMPP(ctk.CTk):
                 text_color=["#64748b", "#94a3b8"]
             )
 
-    def start_server_action(self):
+    def start_server_action(self, on_launch=False):
         port = self.get_selected_port()
         config_manager.set("web_ui_port", port)
         config_manager.save()
@@ -339,7 +372,10 @@ class PyAMPP(ctk.CTk):
         def _start():
             ok, msg = web_server_manager.start(port=port)
             self.after(0, self.update_ui_state)
-            if not ok:
+            if ok:
+                if on_launch and config_manager.get("web_ui_open_browser", False):
+                    self.after(200, self.open_web_ui)
+            else:
                 self.after(0, lambda: self.status_msg.configure(text=msg, text_color=["#dc2626", "#f87171"]))
 
         threading.Thread(target=_start, daemon=True).start()
@@ -372,7 +408,9 @@ class PyAMPP(ctk.CTk):
 
     def save_preferences(self):
         autostart = bool(self.autostart_chk.get())
+        open_browser = bool(self.auto_open_chk.get())
         config_manager.set("web_ui_autostart", autostart)
+        config_manager.set("web_ui_open_browser", open_browser)
         config_manager.save()
 
     def toggle_mode(self):
@@ -431,6 +469,37 @@ class PyAMPP(ctk.CTk):
         self.attributes("-topmost", True)
         self.after(10, lambda: self.attributes("-topmost", False))
         self.focus_force()
+
+    def apply_win32_icon(self, icon_path=None, window=None):
+        """Bypasses Tkinter icon scaling by sending WM_SETICON directly to the HWND."""
+        if os.name != 'nt':
+            return
+        target = window or self
+        ico_file = icon_path or getattr(self, "icon_path", None)
+        if not ico_file or not Path(ico_file).exists():
+            return
+
+        def _set_icon():
+            try:
+                target.update_idletasks()
+                import ctypes
+                user32 = ctypes.windll.user32
+                hwnd = user32.GetAncestor(target.winfo_id(), 2) or user32.GetParent(target.winfo_id()) or target.winfo_id()
+                abs_path = os.path.abspath(str(ico_file))
+                # Win32 Constants:
+                # WM_SETICON = 0x0080, IMAGE_ICON = 1, LR_LOADFROMFILE = 0x0010
+                # ICON_BIG = 1 (Taskbar / Alt+Tab, 48x48)
+                # ICON_SMALL = 0 (Titlebar, 16x16)
+                hicon_big = user32.LoadImageW(0, abs_path, 1, 48, 48, 0x0010)
+                hicon_small = user32.LoadImageW(0, abs_path, 1, 16, 16, 0x0010)
+                if hicon_big:
+                    user32.SendMessageW(hwnd, 0x0080, 1, hicon_big)
+                if hicon_small:
+                    user32.SendMessageW(hwnd, 0x0080, 0, hicon_small)
+            except Exception:
+                pass
+
+        self.after(10, _set_icon)
 
     def center_dialog(self, dialog, width, height):
         """Centers a toplevel dialog directly inside the main controller window."""
@@ -522,7 +591,11 @@ class PyAMPP(ctk.CTk):
         dialog = ctk.CTkToplevel(self)
         dialog.title("Exit PyAMPP")
         if self.icon_path.exists():
-            dialog.iconbitmap(str(self.icon_path))
+            try:
+                dialog.iconbitmap(str(self.icon_path))
+            except Exception:
+                pass
+            self.apply_win32_icon(self.icon_path, window=dialog)
 
         dialog_width = 380
         dialog_height = 170

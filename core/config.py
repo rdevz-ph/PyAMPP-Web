@@ -23,14 +23,17 @@ def get_appdata_dir():
         # Fallback to home directory if APPDATA is not set
         path = Path.home() / ".pyampp"
     
-    path.mkdir(parents=True, exist_ok=True)
+    try:
+        path.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        pass
     return path
 
 
 BASE_DIR = get_base_dir()
 APPDATA_DIR = get_appdata_dir()
 DATA_DIR = BASE_DIR / "data"
-VERSION = "1.0.1-web"
+VERSION = "1.0.2-web"
 
 
 def get_system_php_path():
@@ -90,7 +93,7 @@ DEFAULT_CONFIG = {
     "mysql_port": 3306,
     "apache_url": "https://www.apachelounge.com/download/VS17/binaries/httpd-2.4.66-251206-Win64-VS17.zip",
     "mysql_url": "https://downloads.mysql.com/archives/get/p/23/file/mysql-8.4.4-winx64.zip",
-    "php_url": "https://downloads.php.net/~windows/releases/archives/php-8.5.12-Win32-vs17-x64.zip",
+    "php_url": "https://downloads.php.net/~windows/releases/archives/php-8.6.0-Win32-vs18-x64.zip",
     "phpmyadmin_url": "https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip",
     "install_dir": "C:\\PyAMPP\\bin",
     "mysql_data_dir": "C:\\PyAMPP\\mysql_data",
@@ -105,11 +108,12 @@ DEFAULT_CONFIG = {
 
 COMPONENTS_PRESETS = {
     "PHP": {
-        "8.5.12": "https://downloads.php.net/~windows/releases/archives/php-8.5.12-Win32-vs17-x64.zip",
-        "8.4.27": "https://downloads.php.net/~windows/releases/archives/php-8.4.27-Win32-vs17-x64.zip",
-        "8.3.36": "https://downloads.php.net/~windows/releases/archives/php-8.3.36-Win32-vs16-x64.zip",
-        "8.2.35": "https://downloads.php.net/~windows/releases/archives/php-8.2.35-Win32-vs16-x64.zip",
-        "8.1.34": "https://windows.php.net/downloads/releases/php-8.1.34-Win32-vs16-x64.zip",
+        "8.6.0": "https://downloads.php.net/~windows/releases/archives/php-8.6.0-Win32-vs18-x64.zip",
+        "8.5.13": "https://downloads.php.net/~windows/releases/archives/php-8.5.13-Win32-vs17-x64.zip",
+        "8.4.28": "https://downloads.php.net/~windows/releases/archives/php-8.4.28-Win32-vs17-x64.zip",
+        "8.3.37": "https://downloads.php.net/~windows/releases/archives/php-8.3.37-Win32-vs16-x64.zip",
+        "8.2.36": "https://downloads.php.net/~windows/releases/archives/php-8.2.36-Win32-vs16-x64.zip",
+        "8.1.34 (Archive)": "https://windows.php.net/downloads/releases/archives/php-8.1.34-Win32-vs16-x64.zip",
         "8.0.30 (Archive)": "https://windows.php.net/downloads/releases/archives/php-8.0.30-Win32-vs16-x64.zip",
         "7.4.33 (Archive)": "https://windows.php.net/downloads/releases/archives/php-7.4.33-Win32-vc15-x64.zip",
     },
@@ -174,29 +178,29 @@ class ConfigManager:
         saved_config = {}
         
         # 1. Load from AppData first
-        if config_path.exists():
-            try:
+        try:
+            if config_path.exists():
                 with open(config_path, "r") as f:
                     saved_config = json.load(f)
                     self.config.update(saved_config)
-            except Exception as e:
-                print(f"Error loading config from AppData: {e}")
-        else:
-            # 2. Migration: Check for legacy config in BASE_DIR or install_dir
-            legacy_paths = [
-                BASE_DIR / "config.json",
-                Path(self.config["install_dir"]) / "config.json"
-            ]
-            for path in legacy_paths:
-                if path.exists():
-                    try:
-                        with open(path, "r") as f:
-                            saved_config = json.load(f)
-                            self.config.update(saved_config)
-                        self.save() # Migrate to AppData immediately
-                        break
-                    except:
-                        continue
+            else:
+                # 2. Migration: Check for legacy config in BASE_DIR or install_dir
+                legacy_paths = [
+                    BASE_DIR / "config.json",
+                    Path(self.config["install_dir"]) / "config.json"
+                ]
+                for path in legacy_paths:
+                    if path.exists():
+                        try:
+                            with open(path, "r") as f:
+                                saved_config = json.load(f)
+                                self.config.update(saved_config)
+                            self.save() # Migrate to AppData immediately
+                            break
+                        except:
+                            continue
+        except Exception as e:
+            pass
 
         # Force update broken Apache URL if detected
         if "httpd-2.4.62-win64-VS17.zip" in self.config.get("apache_url", ""):

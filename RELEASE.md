@@ -1,10 +1,17 @@
-# PyAMPP 1.0.1-web Release Notes
+# PyAMPP 1.0.2-web Release Notes
 
 ## What's New
 
 ### Added
-* Added a dedicated About page displaying application details, current environment paths, stack name breakdown, developer profile, and upstream credits.
-* Added an About navigation link to the web management dashboard sidebar.
+* Added an Auto-open webpage on launch preference checkbox in the controller window to open the web management dashboard automatically when the server starts.
+* Added native High-DPI display scaling support and an explicit Application User Model ID on Windows so taskbar icons and text render crisply on high-resolution monitors.
+* Added a 9-frame multi-resolution icon generator in the build script to package icons at all standard Windows DPI scaling sizes.
+* Added support for PHP 8.6.0 download presets.
+
+### Changed
+* Updated PHP version presets to the latest security releases: PHP 8.5.13, 8.4.28, 8.3.37, and 8.2.36.
+* Moved PHP 8.1.34 to archived releases in download presets.
+* Updated window title bar and taskbar icon rendering using native Win32 messages to eliminate blurry icon scaling in desktop windows.
 
 ## Key Features
 
@@ -23,7 +30,7 @@
 
 ## Included Version Presets
 
-* PHP: 8.5.12, 8.4.27, 8.3.36, 8.2.35, 8.1.34, 8.0.30, and 7.4.33
+* PHP: 8.6.0, 8.5.13, 8.4.28, 8.3.37, 8.2.36, 8.1.34 (Archive), 8.0.30 (Archive), and 7.4.33 (Archive)
 * Apache: 2.4.66
 * MySQL: 8.4.4, 8.0.40, and 5.7.44
 * phpMyAdmin: 5.2.3, 5.2.2, and 5.2.1

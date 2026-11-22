@@ -19,7 +19,11 @@ class SetupWizard(ctk.CTkToplevel):
         # Set icon
         icon_path = Path(parent.icon_path) if hasattr(parent, 'icon_path') else Path(__file__).parent.parent / "app.ico"
         if icon_path.exists():
-            self.iconbitmap(str(icon_path))
+            try:
+                self.iconbitmap(str(icon_path))
+            except Exception:
+                pass
+            self._apply_win32_taskbar_icon(icon_path)
         
         # Center the wizard on the screen
         window_width = 650
@@ -79,6 +83,31 @@ class SetupWizard(ctk.CTkToplevel):
         # Start presets download
         self.show_loading_presets()
         threading.Thread(target=self.download_initial_presets, daemon=True).start()
+
+    def _apply_win32_taskbar_icon(self, icon_path):
+        """Bypasses Tkinter icon scaling by sending WM_SETICON directly to the HWND."""
+        if os.name != 'nt':
+            return
+        if not icon_path or not Path(icon_path).exists():
+            return
+
+        def _set_icon():
+            try:
+                self.update_idletasks()
+                import ctypes
+                user32 = ctypes.windll.user32
+                hwnd = user32.GetAncestor(self.winfo_id(), 2) or user32.GetParent(self.winfo_id()) or self.winfo_id()
+                abs_path = os.path.abspath(str(icon_path))
+                hicon_big = user32.LoadImageW(0, abs_path, 1, 48, 48, 0x0010)
+                hicon_small = user32.LoadImageW(0, abs_path, 1, 16, 16, 0x0010)
+                if hicon_big:
+                    user32.SendMessageW(hwnd, 0x0080, 1, hicon_big)
+                if hicon_small:
+                    user32.SendMessageW(hwnd, 0x0080, 0, hicon_small)
+            except Exception:
+                pass
+
+        self.after(10, _set_icon)
 
     def show_loading_presets(self):
         self.clear_frame()

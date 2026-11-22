@@ -8,7 +8,7 @@
   ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
   ![Interface](https://img.shields.io/badge/Interface-Web%20Dashboard%20%26%20Tray-4f46e5)
   ![License](https://img.shields.io/badge/License-MIT-059669)
-  ![Version](https://img.shields.io/badge/Version-1.0.1--web-f59e0b)
+  ![Version](https://img.shields.io/badge/Version-1.0.2--web-f59e0b)
 </div>
 
 > [!NOTE]
@@ -81,7 +81,7 @@ Download the latest version from the [Releases](https://github.com/rdevz-ph/PyAM
 
 PyAMPP includes tested download presets for the following components:
 
-- **PHP:** 8.5.12, 8.4.27, 8.3.36, 8.2.35, 8.1.34, 8.0.30, and 7.4.33
+- **PHP:** 8.6.0, 8.5.13, 8.4.28, 8.3.37, 8.2.36, 8.1.34, 8.0.30, and 7.4.33
 - **Apache:** 2.4.66
 - **MySQL:** 8.4.4, 8.0.40, and 5.7.44
 - **phpMyAdmin:** 5.2.3, 5.2.2, and 5.2.1
